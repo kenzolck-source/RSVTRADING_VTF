@@ -125,11 +125,25 @@
             align-items: start;
         }
 
+        .workbench-grid {
+            display: grid;
+            grid-template-columns: minmax(430px, 1.18fr) minmax(360px, 0.82fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .decision-stack {
+            display: grid;
+            gap: 18px;
+            min-width: 0;
+        }
+
         .panel {
             background: rgba(17, 24, 39, 0.92);
             border: 1px solid rgba(148, 163, 184, 0.22);
             border-radius: 8px;
             box-shadow: var(--shadow);
+            min-width: 0;
         }
 
         .panel-header {
@@ -160,6 +174,68 @@
             font-size: 13px;
             font-weight: 900;
             white-space: nowrap;
+        }
+
+        .tv-panel {
+            overflow: hidden;
+        }
+
+        .tv-controls {
+            display: grid;
+            grid-template-columns: 1.1fr 0.8fr 0.8fr;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(15, 23, 42, 0.38);
+        }
+
+        .tv-controls .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .tv-controls .button-row {
+            grid-column: 1 / -1;
+        }
+
+        .tv-controls .primary-btn {
+            width: auto;
+        }
+
+        .tv-note {
+            grid-column: 1 / -1;
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .tv-chart-shell {
+            height: 620px;
+            min-height: 360px;
+            border-top: 1px solid rgba(148, 163, 184, 0.08);
+            background: #050816;
+        }
+
+        .tradingview-widget-container,
+        .tradingview-widget-container__widget {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tradingview-widget-copyright {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: var(--muted);
+            font-size: 12px;
+            background: #0f172a;
+        }
+
+        .tradingview-widget-copyright a {
+            color: var(--blue);
+            text-decoration: none;
         }
 
         .wizard-body {
@@ -668,6 +744,14 @@
                 grid-template-columns: 1fr;
             }
 
+            .workbench-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tv-controls {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
             .stats-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -694,10 +778,15 @@
             }
 
             .form-grid,
+            .tv-controls,
             .filters,
             .details-grid,
             .mini-form {
                 grid-template-columns: 1fr;
+            }
+
+            .tv-chart-shell {
+                height: 440px;
             }
 
             .stats-grid {
@@ -731,7 +820,52 @@
         </header>
 
         <section id="view-today" class="view active">
-            <div class="grid">
+            <div class="workbench-grid">
+                <section class="panel tv-panel">
+                    <div class="panel-header">
+                        <h2>TradingView 工作台</h2>
+                        <span id="tv-status" class="step-pill">未載入</span>
+                    </div>
+                    <div class="tv-controls">
+                        <div class="field">
+                            <label for="tv-symbol">Symbol</label>
+                            <input id="tv-symbol" placeholder="NASDAQ:QQQ / CME_MINI:NQ1!" autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label for="tv-interval">Interval</label>
+                            <select id="tv-interval">
+                                <option value="1">1m</option>
+                                <option value="3">3m</option>
+                                <option value="5">5m</option>
+                                <option value="15">15m</option>
+                                <option value="30">30m</option>
+                                <option value="60">1H</option>
+                                <option value="240">4H</option>
+                                <option value="D">1D</option>
+                                <option value="W">1W</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="tv-height">圖表高度</label>
+                            <input id="tv-height" type="number" min="360" max="900" step="20" inputmode="numeric">
+                        </div>
+                        <div class="field full">
+                            <label for="tv-layout-url">我的 TradingView Layout URL</label>
+                            <input id="tv-layout-url" placeholder="貼上你已登入帳號可打開的 TradingView layout 連結">
+                        </div>
+                        <div class="button-row">
+                            <button type="button" class="primary-btn" id="apply-tv-chart-btn">套用圖表</button>
+                            <button type="button" class="secondary-btn" id="open-tv-layout-btn">打開我的 TradingView Layout</button>
+                            <button type="button" class="ghost-btn" id="sync-chart-fields-btn">同步到紀錄商品/timeframe</button>
+                        </div>
+                        <p class="tv-note">官方圖表只作即時參考；私人 Cloud / Trap 指標請用你的 TradingView layout 新分頁查看。</p>
+                    </div>
+                    <div id="tv-chart-shell" class="tv-chart-shell">
+                        <div id="tv-widget-root" class="tradingview-widget-container"></div>
+                    </div>
+                </section>
+
+                <div class="decision-stack">
                 <section class="panel">
                     <div class="panel-header">
                         <h2>判斷流程</h2>
@@ -881,6 +1015,38 @@
                             </div>
                         </div>
 
+                        <div id="screen-range-side" class="screen">
+                            <span class="step-label">Range Edge</span>
+                            <h3>Setup 發生在 Range 的哪個位置？</h3>
+                            <p>Range 可以交易，但只接受邊界。中間位即使有 setup 名稱，也容易變成追價。</p>
+                            <div class="answer-list">
+                                <button class="answer-btn good" data-action="range-side" data-side="long">
+                                    <span class="answer-icon">↑</span>
+                                    <span>
+                                        <span class="answer-title">地板低多 (LONG)</span>
+                                        <span class="answer-sub">Setup 在區間底部 / 支撐附近觸發，目標看回區間上方。</span>
+                                        <span class="answer-guide">如何判斷：下方同一區域多次守住，這次 setup 的失效位能放在地板之外；Entry 到區間頂部仍有足夠 R:R。</span>
+                                    </span>
+                                </button>
+                                <button class="answer-btn bad" data-action="range-side" data-side="short">
+                                    <span class="answer-icon">↓</span>
+                                    <span>
+                                        <span class="answer-title">天花板高空 (SHORT)</span>
+                                        <span class="answer-sub">Setup 在區間頂部 / 阻力附近觸發，目標看回區間下方。</span>
+                                        <span class="answer-guide">如何判斷：上方同一區域多次壓回，這次 setup 的失效位能放在天花板之外；Entry 到區間底部仍有足夠 R:R。</span>
+                                    </span>
+                                </button>
+                                <button class="answer-btn info" data-action="range-side" data-side="none">
+                                    <span class="answer-icon">×</span>
+                                    <span>
+                                        <span class="answer-title">不在邊界 / 方向不清</span>
+                                        <span class="answer-sub">Setup 出現在區間中間，或者你不能清楚講出是低多還是高空。</span>
+                                        <span class="answer-guide">如何判斷：上落空間都差不多、SL 沒有乾淨位置、目標位太近。這種情況只記錄，不落盤。</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
                         <div id="screen-result" class="screen center">
                             <div id="result-mark" class="result-mark">?</div>
                             <h3 id="result-action" class="result-action wait">WAIT</h3>
@@ -985,6 +1151,7 @@
                         </div>
                     </form>
                 </aside>
+                </div>
             </div>
         </section>
 
@@ -1035,6 +1202,15 @@
 
     <script>
         const STORAGE_KEY = "rsvDecisionJournal.v1";
+        const TV_SETTINGS_KEY = "rsvTradingViewSettings.v1";
+        const TRADINGVIEW_WIDGET_SRC = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+
+        const defaultTvSettings = () => ({
+            symbol: "NASDAQ:QQQ",
+            interval: "5",
+            layoutUrl: "https://www.tradingview.com/chart/",
+            height: 620
+        });
 
         const defaultState = () => ({
             trendId: "",
@@ -1048,12 +1224,14 @@
                 respectsSystem: null,
                 trend: null,
                 blocked: null,
-                setup: null
+                setup: null,
+                rangeSide: null
             }
         });
 
         let appState = defaultState();
         let records = [];
+        let tvSettings = defaultTvSettings();
         let toastTimer = null;
 
         const outcomeLabels = {
@@ -1077,6 +1255,7 @@
                 q2: document.getElementById("screen-q2"),
                 q3: document.getElementById("screen-q3"),
                 q4: document.getElementById("screen-q4"),
+                rangeSide: document.getElementById("screen-range-side"),
                 result: document.getElementById("screen-result")
             },
             stepIndicator: document.getElementById("step-indicator"),
@@ -1088,6 +1267,13 @@
             warningTitle: document.getElementById("master-warning-title"),
             warningText: document.getElementById("master-warning-text"),
             saveStatePill: document.getElementById("save-state-pill"),
+            tvStatus: document.getElementById("tv-status"),
+            tvSymbol: document.getElementById("tv-symbol"),
+            tvInterval: document.getElementById("tv-interval"),
+            tvHeight: document.getElementById("tv-height"),
+            tvLayoutUrl: document.getElementById("tv-layout-url"),
+            tvChartShell: document.getElementById("tv-chart-shell"),
+            tvWidgetRoot: document.getElementById("tv-widget-root"),
             form: document.getElementById("save-form"),
             confidence: document.getElementById("confidence"),
             confidenceValue: document.getElementById("confidence-value"),
@@ -1125,6 +1311,137 @@
             toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
         }
 
+        function normalizeTvUrl(value) {
+            const raw = String(value || "").trim();
+            if (!raw) return "";
+            const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+            try {
+                const url = new URL(withProtocol);
+                return /^https?:$/i.test(url.protocol) ? url.href : "";
+            } catch (error) {
+                return "";
+            }
+        }
+
+        function clampChartHeight(value) {
+            const height = Number(value || defaultTvSettings().height);
+            if (!Number.isFinite(height)) return defaultTvSettings().height;
+            return Math.min(900, Math.max(360, Math.round(height)));
+        }
+
+        function intervalLabel(interval) {
+            const labels = {
+                "1": "1m",
+                "3": "3m",
+                "5": "5m",
+                "15": "15m",
+                "30": "30m",
+                "60": "1H",
+                "240": "4H",
+                D: "1D",
+                W: "1W"
+            };
+            return labels[interval] || interval;
+        }
+
+        function readTvSettingsFromInputs() {
+            const defaults = defaultTvSettings();
+            return {
+                symbol: els.tvSymbol.value.trim() || defaults.symbol,
+                interval: els.tvInterval.value || defaults.interval,
+                layoutUrl: normalizeTvUrl(els.tvLayoutUrl.value) || defaults.layoutUrl,
+                height: clampChartHeight(els.tvHeight.value)
+            };
+        }
+
+        function applyTvSettingsToInputs(settings) {
+            els.tvSymbol.value = settings.symbol;
+            els.tvInterval.value = settings.interval;
+            els.tvLayoutUrl.value = settings.layoutUrl;
+            els.tvHeight.value = String(settings.height);
+            els.tvChartShell.style.height = `${settings.height}px`;
+        }
+
+        function loadTvSettings() {
+            const defaults = defaultTvSettings();
+            try {
+                const stored = JSON.parse(localStorage.getItem(TV_SETTINGS_KEY) || "{}");
+                tvSettings = {
+                    symbol: String(stored.symbol || defaults.symbol),
+                    interval: String(stored.interval || defaults.interval),
+                    layoutUrl: normalizeTvUrl(stored.layoutUrl) || defaults.layoutUrl,
+                    height: clampChartHeight(stored.height || defaults.height)
+                };
+            } catch (error) {
+                tvSettings = defaults;
+            }
+            applyTvSettingsToInputs(tvSettings);
+        }
+
+        function saveTvSettings(settings) {
+            tvSettings = settings;
+            localStorage.setItem(TV_SETTINGS_KEY, JSON.stringify(settings));
+        }
+
+        function renderTradingView(showSavedToast = false) {
+            const settings = readTvSettingsFromInputs();
+            saveTvSettings(settings);
+            applyTvSettingsToInputs(settings);
+            els.tvStatus.textContent = "載入中";
+
+            els.tvWidgetRoot.innerHTML = `
+                <div class="tradingview-widget-container__widget" style="height:calc(100% - 28px);width:100%"></div>
+                <div class="tradingview-widget-copyright">
+                    <a href="https://www.tradingview.com/symbols/${encodeURIComponent(settings.symbol.replace(":", "-"))}/" rel="noopener nofollow" target="_blank">${escapeHtml(settings.symbol)} chart</a>
+                    <span>by TradingView</span>
+                </div>
+            `;
+
+            const script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = TRADINGVIEW_WIDGET_SRC;
+            script.async = true;
+            script.innerHTML = JSON.stringify({
+                autosize: true,
+                symbol: settings.symbol,
+                interval: settings.interval,
+                timezone: "exchange",
+                theme: "dark",
+                backgroundColor: "rgba(15, 23, 42, 1)",
+                style: "1",
+                withdateranges: true,
+                hide_side_toolbar: false,
+                allow_symbol_change: true,
+                save_image: false,
+                locale: "en",
+                calendar: false,
+                support_host: "https://www.tradingview.com"
+            }, null, 2);
+            script.onload = () => {
+                els.tvStatus.textContent = `${settings.symbol} · ${intervalLabel(settings.interval)}`;
+                if (showSavedToast) showToast("TradingView 圖表設定已套用。");
+            };
+            script.onerror = () => {
+                els.tvStatus.textContent = "載入失敗";
+                showToast("TradingView 圖表載入失敗，請檢查網絡或稍後再試。");
+            };
+            els.tvWidgetRoot.appendChild(script);
+        }
+
+        function openTradingViewLayout() {
+            const settings = readTvSettingsFromInputs();
+            saveTvSettings(settings);
+            window.open(settings.layoutUrl, "_blank", "noopener,noreferrer");
+        }
+
+        function syncChartFieldsToJournal() {
+            const settings = readTvSettingsFromInputs();
+            saveTvSettings(settings);
+            document.getElementById("symbol").value = settings.symbol;
+            document.getElementById("timeframe").value = intervalLabel(settings.interval);
+            showToast("已同步 Symbol / Timeframe 到紀錄表單。");
+        }
+
         function saveRecords() {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
             renderAll();
@@ -1138,6 +1455,7 @@
             const outcome = outcomeLabels[raw.outcome] ? raw.outcome : "pending";
             const risk = raw.risk && typeof raw.risk === "object" ? raw.risk : {};
             const answers = raw.answers && typeof raw.answers === "object" ? raw.answers : {};
+            const chartContext = raw.chartContext && typeof raw.chartContext === "object" ? raw.chartContext : {};
 
             return {
                 id: String(raw.id || makeId()),
@@ -1158,13 +1476,19 @@
                     respectsSystem: answers.respectsSystem ?? null,
                     trend: answers.trend ?? null,
                     blocked: answers.blocked ?? null,
-                    setup: answers.setup ?? null
+                    setup: answers.setup ?? null,
+                    rangeSide: answers.rangeSide ?? null
                 },
                 risk: {
                     entry: String(risk.entry || ""),
                     stopLoss: String(risk.stopLoss || ""),
                     takeProfit: String(risk.takeProfit || ""),
                     rr: String(risk.rr || "")
+                },
+                chartContext: {
+                    tvSymbol: String(chartContext.tvSymbol || ""),
+                    tvInterval: String(chartContext.tvInterval || ""),
+                    tvLayoutUrl: String(chartContext.tvLayoutUrl || "")
                 },
                 confidence: Math.min(5, Math.max(1, Number(raw.confidence || 3))),
                 planNote: String(raw.planNote || ""),
@@ -1264,7 +1588,36 @@
                 return;
             }
             appState.reasonText = `大趨勢為【${appState.trendName}】，Setup 分類為【${setupName}】。`;
+            if (appState.trendId === "range") {
+                showScreen("rangeSide", "Range Edge");
+                return;
+            }
             showExecuteResult();
+        }
+
+        function answerRangeSide(side) {
+            appState.answers.rangeSide = side;
+
+            if (side === "none") {
+                appState.reasonText = `Range 中間或方向不清，雖然看到【${appState.setupName}】，但沒有足夠客觀位置支持落盤。`;
+                showWaitResult("Range 邊界不清", "Setup 名稱不能代替位置優勢。你未能確認地板低多或天花板高空，代表這筆交易沒有乾淨 edge。");
+                return;
+            }
+
+            const isLong = side === "long";
+            appState.decisionText = isLong ? "做多 (LONG)" : "做空 (SHORT)";
+            appState.tradeType = `${appState.setupName} ${isLong ? "區間低多" : "區間高空"}`;
+            appState.reasonText = `Range 結構中，Setup 分類為【${appState.setupName}】，觸發位置為【${isLong ? "區間地板低多" : "區間天花板高空"}】。`;
+            renderResult({
+                mark: isLong ? "L" : "S",
+                actionClass: isLong ? "long" : "short",
+                title: "Range 邊界 Setup 確認",
+                desc: `觸發條件：${appState.setupName}。${isLong ? "只接受靠近區間地板的低多，Stop Loss 放在地板外，目標看回區間上方。" : "只接受靠近區間天花板的高空，Stop Loss 放在天花板外，目標看回區間下方。"} 入場前必須用右邊 R:R 計算確認 reward 足夠。`,
+                badges: [[appState.setupName, "yellow"], [isLong ? "區間低多" : "區間高空", isLong ? "green" : "red"]],
+                warningTitle: "師傅的提醒：Range 只做邊界",
+                warningText: "如果你填完 Entry / SL / TP 之後 R:R 唔夠，或者 SL 放唔出邊界之外，這筆就不是交易，是心癮。"
+            });
+            updateRiskReward();
         }
 
         function showWaitResult(title, desc) {
@@ -1422,6 +1775,7 @@
 
         function buildRecordFromForm() {
             updateRiskReward();
+            const currentTvSettings = readTvSettingsFromInputs();
             return normalizeRecord({
                 id: makeId(),
                 createdAt: new Date().toISOString(),
@@ -1443,6 +1797,11 @@
                     stopLoss: formValue("stop-loss"),
                     takeProfit: formValue("take-profit"),
                     rr: formValue("rr")
+                },
+                chartContext: {
+                    tvSymbol: currentTvSettings.symbol,
+                    tvInterval: currentTvSettings.interval,
+                    tvLayoutUrl: currentTvSettings.layoutUrl
                 },
                 confidence: Number(document.getElementById("confidence").value || 3),
                 planNote: formValue("plan-note"),
@@ -1498,7 +1857,9 @@
                     record.reviewNote,
                     record.tags.join(" "),
                     record.tradeType,
-                    record.reasonText
+                    record.reasonText,
+                    record.chartContext?.tvSymbol,
+                    record.chartContext?.tvInterval
                 ].join(" ").toLowerCase();
                 return (!date || record.tradeDate === date)
                     && (!query || blob.includes(query))
@@ -1558,6 +1919,8 @@
         function recordTemplate(record) {
             const dir = directionKey(record);
             const tags = record.tags.length ? record.tags.map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join("") : "";
+            const tvSymbol = record.chartContext?.tvSymbol || "";
+            const tvInterval = record.chartContext?.tvInterval ? intervalLabel(record.chartContext.tvInterval) : "";
             return `
                 <article class="record-card ${directionClass(record)}" data-record-id="${escapeHtml(record.id)}">
                     <div class="record-main">
@@ -1584,6 +1947,8 @@
                             <div class="detail"><span>SL</span><b>${escapeHtml(record.risk.stopLoss || "-")}</b></div>
                             <div class="detail"><span>TP</span><b>${escapeHtml(record.risk.takeProfit || "-")}</b></div>
                             <div class="detail"><span>建立時間</span><b>${escapeHtml(formatDateTime(record.createdAt))}</b></div>
+                            <div class="detail"><span>TV Symbol</span><b>${escapeHtml(tvSymbol || "-")}</b></div>
+                            <div class="detail"><span>TV TF</span><b>${escapeHtml(tvInterval || "-")}</b></div>
                         </div>
                         <p class="record-note"><b>核心邏輯：</b>${escapeHtml(record.reasonText || "-")}</p>
                         ${record.planNote ? `<p class="record-note"><b>計劃：</b>${escapeHtml(record.planNote)}</p>` : ""}
@@ -1642,6 +2007,7 @@
                 `方向：${directionKey(record)} / ${record.tradeType}`,
                 `趨勢：${record.trendName}`,
                 `Setup：${record.setupName}`,
+                `TradingView：${record.chartContext?.tvSymbol || "-"} ${record.chartContext?.tvInterval ? intervalLabel(record.chartContext.tvInterval) : ""}`,
                 `邏輯：${record.reasonText}`,
                 `Entry：${record.risk.entry || "-"}  SL：${record.risk.stopLoss || "-"}  TP：${record.risk.takeProfit || "-"}  R:R：${record.risk.rr || "-"}`,
                 `計劃：${record.planNote || "-"}`
@@ -1667,7 +2033,7 @@
             const headers = [
                 "tradeDate", "symbol", "session", "timeframe", "decision", "tradeType",
                 "trend", "setup", "reason", "entry", "stopLoss", "takeProfit", "rr",
-                "confidence", "outcome", "planNote", "reviewNote", "tags", "createdAt"
+                "tvSymbol", "tvInterval", "tvLayoutUrl", "confidence", "outcome", "planNote", "reviewNote", "tags", "createdAt"
             ];
             const rows = records.map(record => [
                 record.tradeDate,
@@ -1683,6 +2049,9 @@
                 record.risk.stopLoss,
                 record.risk.takeProfit,
                 record.risk.rr,
+                record.chartContext?.tvSymbol || "",
+                record.chartContext?.tvInterval || "",
+                record.chartContext?.tvLayoutUrl || "",
                 record.confidence,
                 outcomeLabels[record.outcome],
                 record.planNote,
@@ -1789,9 +2158,19 @@
                     if (action === "q2") answerQ2(button.dataset.id, button.dataset.name);
                     if (action === "q3") answerQ3(button.dataset.blocked === "true");
                     if (action === "q4") answerQ4(button.dataset.id, button.dataset.name);
+                    if (action === "range-side") answerRangeSide(button.dataset.side);
                 });
             });
             els.form.addEventListener("submit", handleSave);
+            document.getElementById("apply-tv-chart-btn").addEventListener("click", () => renderTradingView(true));
+            document.getElementById("open-tv-layout-btn").addEventListener("click", openTradingViewLayout);
+            document.getElementById("sync-chart-fields-btn").addEventListener("click", syncChartFieldsToJournal);
+            els.tvSymbol.addEventListener("keydown", event => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    renderTradingView(true);
+                }
+            });
             ["entry", "stop-loss", "take-profit"].forEach(id => {
                 document.getElementById(id).addEventListener("input", updateRiskReward);
                 document.getElementById(id).addEventListener("change", updateRiskReward);
@@ -1815,10 +2194,12 @@
 
         function init() {
             document.getElementById("trade-date").value = todayString();
+            loadTvSettings();
             updateConfidence();
             updateRiskReward();
             loadRecords();
             bindEvents();
+            renderTradingView(false);
             renderAll();
         }
 
