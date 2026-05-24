@@ -336,6 +336,122 @@
             background: rgba(120, 53, 15, 0.2);
         }
 
+        .live-panel {
+            position: relative;
+            overflow: hidden;
+            border-color: rgba(56, 189, 248, 0.34);
+        }
+
+        .live-panel .panel-header {
+            align-items: flex-start;
+        }
+
+        .live-panel .panel-header > div {
+            min-width: 0;
+        }
+
+        .live-subtitle {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .live-body {
+            display: grid;
+            gap: 12px;
+            padding: 14px;
+        }
+
+        .live-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .live-metric {
+            min-height: 74px;
+            display: grid;
+            align-content: center;
+            gap: 6px;
+            padding: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 7px;
+            background: rgba(15, 23, 42, 0.72);
+            min-width: 0;
+        }
+
+        .live-metric span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 850;
+        }
+
+        .live-metric strong {
+            color: #f8fafc;
+            font-size: 18px;
+            line-height: 1.18;
+            overflow-wrap: anywhere;
+        }
+
+        .live-decision.long,
+        .live-status.good,
+        .live-metric strong.good {
+            color: var(--green);
+        }
+
+        .live-decision.short,
+        .live-status.bad,
+        .live-metric strong.bad {
+            color: var(--red);
+        }
+
+        .live-decision.wait,
+        .live-status.warn,
+        .live-metric strong.warn {
+            color: var(--yellow);
+        }
+
+        .live-reason {
+            padding: 10px 12px;
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 7px;
+            color: #dbeafe;
+            background: rgba(8, 47, 73, 0.26);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .live-panel .primary-btn,
+        .live-panel .secondary-btn,
+        .live-panel .ghost-btn {
+            width: auto;
+            flex: 1 1 130px;
+        }
+
+        body.live-mode .answer-guide,
+        body.live-mode .screen > p,
+        body.live-mode .setup-detector p,
+        body.live-mode .tv-note,
+        body.live-mode .tv-controls .field.full,
+        body.live-mode .slow-field {
+            display: none;
+        }
+
+        body.live-mode .wizard-body {
+            min-height: 320px;
+            padding: 16px;
+        }
+
+        body.live-mode .indicator-body,
+        body.live-mode .save-panel {
+            gap: 12px;
+        }
+
+        body.live-mode .screen h3 {
+            font-size: 20px;
+        }
+
         .tv-chart-shell {
             height: 620px;
             min-height: 360px;
@@ -883,6 +999,10 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
+            .live-panel {
+                position: static;
+            }
+
             .filters {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -908,7 +1028,8 @@
             .tv-controls,
             .filters,
             .details-grid,
-            .mini-form {
+            .mini-form,
+            .live-metrics {
                 grid-template-columns: 1fr;
             }
 
@@ -993,6 +1114,46 @@
                 </section>
 
                 <div class="decision-stack">
+                <section class="panel live-panel" id="live-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>盤中快判</h2>
+                            <p class="live-subtitle">盤中只看四件事：方向、Setup 分數、R:R、狀態。詳細覆盤留到盤後。</p>
+                        </div>
+                        <button type="button" class="ghost-btn" id="live-mode-toggle" aria-pressed="false">快判模式 OFF</button>
+                    </div>
+                    <div class="live-body">
+                        <div class="live-metrics">
+                            <div class="live-metric">
+                                <span>方向</span>
+                                <strong id="live-decision" class="live-decision wait">未判斷</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>Setup</span>
+                                <strong id="live-setup">未有</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>分數</span>
+                                <strong id="live-score">-</strong>
+                            </div>
+                            <div class="live-metric">
+                                <span>R:R</span>
+                                <strong id="live-rr">-</strong>
+                            </div>
+                        </div>
+                        <div class="live-metric">
+                            <span>盤中狀態</span>
+                            <strong id="live-status" class="live-status warn">先完成 Step 1-3</strong>
+                        </div>
+                        <div id="live-reason" class="live-reason">先用 Step 1-3 建立大方向，再用指標快填讓系統判斷 Setup。</div>
+                        <div class="button-row">
+                            <button type="button" class="primary-btn" id="live-detect-btn">即時計分</button>
+                            <button type="button" class="secondary-btn" id="live-risk-focus-btn">填 Entry / SL / TP</button>
+                            <button type="button" class="ghost-btn" id="live-quick-save-btn">快速儲存</button>
+                        </div>
+                    </div>
+                </section>
+
                 <section class="panel">
                     <div class="panel-header">
                         <h2>判斷流程</h2>
@@ -1321,15 +1482,15 @@
                                     <span id="confidence-value" class="confidence-value">3</span>
                                 </div>
                             </div>
-                            <div class="field full">
+                            <div class="field full slow-field">
                                 <label for="plan-note">計劃筆記</label>
                                 <textarea id="plan-note" placeholder="寫低你點解入 / 點解等 / 觸發條件 / 失效條件"></textarea>
                             </div>
-                            <div class="field full">
+                            <div class="field full slow-field">
                                 <label for="screenshot">截圖連結 / 備註</label>
                                 <input id="screenshot" placeholder="TradingView chart link、圖片路徑或簡短備註">
                             </div>
-                            <div class="field">
+                            <div class="field slow-field">
                                 <label for="outcome">結果狀態</label>
                                 <select id="outcome">
                                     <option value="pending">未覆盤</option>
@@ -1339,11 +1500,11 @@
                                     <option value="skipped">最後無做</option>
                                 </select>
                             </div>
-                            <div class="field">
+                            <div class="field slow-field">
                                 <label for="tags">標籤</label>
                                 <input id="tags" placeholder="例如 PMH, Choppy">
                             </div>
-                            <div class="field full">
+                            <div class="field full slow-field">
                                 <label for="review-note">覆盤心得</label>
                                 <textarea id="review-note" placeholder="之後補填：有無跟 SL？有無追價？setup 是否成立？"></textarea>
                             </div>
@@ -1406,6 +1567,7 @@
     <script>
         const STORAGE_KEY = "rsvDecisionJournal.v1";
         const TV_SETTINGS_KEY = "rsvTradingViewSettings.v1";
+        const LIVE_MODE_KEY = "rsvLiveTradeMode.v1";
         const TRADINGVIEW_WIDGET_SRC = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
 
         const defaultTvSettings = () => ({
@@ -1452,6 +1614,7 @@
         let records = [];
         let tvSettings = defaultTvSettings();
         let indicatorState = defaultIndicatorState();
+        let liveMode = false;
         let toastTimer = null;
 
         const indicatorLabels = {
@@ -1528,6 +1691,13 @@
             tvWidgetRoot: document.getElementById("tv-widget-root"),
             indicatorSummary: document.getElementById("indicator-summary"),
             setupDetectorSummary: document.getElementById("setup-detector-summary"),
+            liveModeToggle: document.getElementById("live-mode-toggle"),
+            liveDecision: document.getElementById("live-decision"),
+            liveSetup: document.getElementById("live-setup"),
+            liveScore: document.getElementById("live-score"),
+            liveRr: document.getElementById("live-rr"),
+            liveStatus: document.getElementById("live-status"),
+            liveReason: document.getElementById("live-reason"),
             indicatorNote: document.getElementById("indicator-note"),
             form: document.getElementById("save-form"),
             confidence: document.getElementById("confidence"),
@@ -1564,6 +1734,121 @@
             els.toast.textContent = message;
             els.toast.classList.add("show");
             toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
+        }
+
+        function setLiveMode(enabled, showMessage = false) {
+            liveMode = Boolean(enabled);
+            document.body.classList.toggle("live-mode", liveMode);
+            els.liveModeToggle.textContent = liveMode ? "快判模式 ON" : "快判模式 OFF";
+            els.liveModeToggle.setAttribute("aria-pressed", String(liveMode));
+            localStorage.setItem(LIVE_MODE_KEY, liveMode ? "true" : "false");
+            if (showMessage) showToast(liveMode ? "已切換到盤中快判模式。" : "已回到完整模式。");
+            updateLivePanel();
+        }
+
+        function loadLiveMode() {
+            setLiveMode(localStorage.getItem(LIVE_MODE_KEY) === "true", false);
+        }
+
+        function decisionClassFromText(text) {
+            if (String(text || "").includes("LONG")) return "long";
+            if (String(text || "").includes("SHORT")) return "short";
+            return "wait";
+        }
+
+        function scoreStatusClass(score) {
+            if (score >= 85) return "good";
+            if (score >= 70) return "warn";
+            return "bad";
+        }
+
+        function currentRiskRewardValue() {
+            const value = Number(formValue("rr"));
+            return Number.isFinite(value) && value > 0 ? value : NaN;
+        }
+
+        function updateLivePanel() {
+            if (!els.liveDecision) return;
+            const detection = detectSetupCandidates();
+            const savedBest = appState.setupDetection?.candidates?.[0] || null;
+            const best = savedBest || detection.candidates[0] || null;
+            const decisionText = appState.decisionText || "未判斷";
+            const decisionClass = decisionClassFromText(decisionText);
+            const rr = formValue("rr");
+            const rrNumber = currentRiskRewardValue();
+
+            els.liveDecision.textContent = decisionText;
+            els.liveDecision.className = `live-decision ${decisionClass}`;
+            els.liveSetup.textContent = appState.setupName && appState.setupName !== "未知" ? appState.setupName : best?.name || "未有";
+            els.liveScore.textContent = best ? `${best.score}/100` : "-";
+            els.liveScore.className = best ? scoreStatusClass(best.score) : "";
+            els.liveRr.textContent = rr || "-";
+
+            let status = "先完成 Step 1-3";
+            let statusClass = "warn";
+            if (appState.decisionText.includes("WAIT")) {
+                status = "WAIT";
+                statusClass = "warn";
+            } else if (appState.answers.respectsSystem === false || appState.trendId === "none" || appState.answers.blocked === true) {
+                status = "已被流程否決";
+                statusClass = "bad";
+            } else if (!appState.answers.respectsSystem || !appState.trendId || appState.answers.blocked === null) {
+                status = "先完成 Step 1-3";
+                statusClass = "warn";
+            } else if (!best) {
+                status = "等待 Setup 證據";
+                statusClass = "warn";
+            } else if (appState.trendId === "range" && !appState.answers.rangeSide) {
+                status = "等 Range 邊界";
+                statusClass = "warn";
+            } else if (Number.isFinite(rrNumber) && rrNumber < 1.5) {
+                status = "R:R 偏低";
+                statusClass = "warn";
+            } else if (decisionClass === "long" || decisionClass === "short") {
+                status = best.score >= 80 ? "可考慮" : "分數偏低";
+                statusClass = best.score >= 80 ? "good" : "warn";
+            } else {
+                status = best.score >= 80 ? "Setup 候選成立" : "等待確認";
+                statusClass = scoreStatusClass(best.score);
+            }
+
+            const rrWarning = Number.isFinite(rrNumber) && rrNumber < 1.5 ? " R:R 未達 1.5 前，不要用主觀理由硬做。" : "";
+            els.liveStatus.textContent = status;
+            els.liveStatus.className = `live-status ${statusClass}`;
+            els.liveReason.textContent = appState.reasonText || setupDetectionSummaryText(detection) || "先填客觀觀察，再讓系統判斷。";
+            if (rrWarning) els.liveReason.textContent += rrWarning;
+        }
+
+        function quickDetectSetup() {
+            if (appState.answers.respectsSystem === null) {
+                showToast("先按開始，完成 Step 1-3 後再即時計分。");
+                return;
+            }
+            if (!appState.trendId || appState.answers.blocked === null) {
+                showToast("先完成 Step 1-3：系統、趨勢、HTF。");
+                return;
+            }
+            if (appState.answers.respectsSystem === false || appState.trendId === "none" || appState.answers.blocked === true) {
+                showToast("目前已被前置流程否決，先 WAIT，不要硬找 Setup。");
+                updateLivePanel();
+                return;
+            }
+            answerDetectedSetup();
+            updateLivePanel();
+        }
+
+        function focusRiskFields() {
+            const entry = document.getElementById("entry");
+            entry.scrollIntoView({ behavior: "smooth", block: "center" });
+            entry.focus();
+        }
+
+        function quickSaveRecord() {
+            if (typeof els.form.requestSubmit === "function") {
+                els.form.requestSubmit();
+                return;
+            }
+            document.getElementById("save-btn").click();
         }
 
         function normalizeTvUrl(value) {
@@ -1751,6 +2036,7 @@
             els.indicatorNote.value = indicatorState.note;
             els.indicatorSummary.textContent = indicatorSummaryText(indicatorState);
             renderSetupDetectorPreview();
+            updateLivePanel();
         }
 
         function setIndicatorGroup(group, value) {
@@ -2032,6 +2318,7 @@
             Object.values(els.screens).forEach(screen => screen.classList.remove("active"));
             els.screens[screenName].classList.add("active");
             els.stepIndicator.textContent = stepText;
+            updateLivePanel();
         }
 
         function startApp() {
@@ -2249,6 +2536,7 @@
             if (![entry, stopLoss, takeProfit].every(Number.isFinite)) {
                 rrInput.value = "";
                 rrStatus.textContent = "輸入 Entry、Stop Loss、Take Profit 後自動計算。";
+                updateLivePanel();
                 return;
             }
 
@@ -2260,12 +2548,14 @@
                 rrInput.value = "";
                 rrStatus.textContent = "價格方向不一致：LONG 應 TP > Entry > SL；SHORT 應 SL > Entry > TP。";
                 rrStatus.classList.add("warn");
+                updateLivePanel();
                 return;
             }
 
             rrInput.value = (reward / risk).toFixed(2);
             rrStatus.textContent = `自動計算：Reward ${reward.toFixed(2)} / Risk ${risk.toFixed(2)}。`;
             rrStatus.classList.add("good");
+            updateLivePanel();
         }
 
         function clearSaveForm(keepDate = true) {
@@ -2683,6 +2973,10 @@
             document.getElementById("apply-tv-chart-btn").addEventListener("click", () => renderTradingView(true));
             document.getElementById("open-tv-layout-btn").addEventListener("click", openTradingViewLayout);
             document.getElementById("sync-chart-fields-btn").addEventListener("click", syncChartFieldsToJournal);
+            els.liveModeToggle.addEventListener("click", () => setLiveMode(!liveMode, true));
+            document.getElementById("live-detect-btn").addEventListener("click", quickDetectSetup);
+            document.getElementById("live-risk-focus-btn").addEventListener("click", focusRiskFields);
+            document.getElementById("live-quick-save-btn").addEventListener("click", quickSaveRecord);
             els.tvSymbol.addEventListener("keydown", event => {
                 if (event.key === "Enter") {
                     event.preventDefault();
@@ -2726,6 +3020,7 @@
             updateIndicatorUi();
             updateConfidence();
             updateRiskReward();
+            loadLiveMode();
             loadRecords();
             bindEvents();
             renderTradingView(false);
