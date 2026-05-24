@@ -277,6 +277,65 @@
             font-size: 13px;
         }
 
+        #screen-q4 .answer-list {
+            display: none;
+        }
+
+        .setup-detector {
+            display: grid;
+            gap: 14px;
+            margin-top: 16px;
+            padding: 14px;
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 8px;
+            background: rgba(8, 47, 73, 0.24);
+        }
+
+        .setup-detector h4 {
+            margin: 0;
+            color: #e0f2fe;
+            font-size: 15px;
+        }
+
+        .setup-detector p {
+            margin: 0;
+        }
+
+        .setup-detector-summary {
+            display: grid;
+            gap: 8px;
+        }
+
+        .setup-candidate {
+            display: grid;
+            gap: 5px;
+            padding: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            border-radius: 7px;
+            background: rgba(15, 23, 42, 0.68);
+        }
+
+        .setup-candidate strong {
+            color: #f8fafc;
+            font-size: 14px;
+        }
+
+        .setup-candidate span {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .setup-candidate.top {
+            border-color: rgba(34, 197, 94, 0.5);
+            background: rgba(20, 83, 45, 0.2);
+        }
+
+        .setup-candidate.blocked {
+            border-color: rgba(245, 158, 11, 0.45);
+            background: rgba(120, 53, 15, 0.2);
+        }
+
         .tv-chart-shell {
             height: 620px;
             min-height: 360px;
@@ -1037,8 +1096,16 @@
 
                         <div id="screen-q4" class="screen">
                             <span class="step-label">Step 4</span>
-                            <h3>這次是否屬於筆記中的 Setup？</h3>
-                            <p>不要因為想落盤而硬貼名。你要能說出流程、觸發位、失效位。</p>
+                            <div class="setup-detector">
+                                <h4>客觀 Setup 偵測</h4>
+                                <p class="muted">先在「指標快填」輸入你看到的事實：Cloud 狀態、Cloud-to-Cloud 路徑、Trap、VSOP 四步、Kim / R-Kim。然後由系統判斷最適合的 setup；證據不夠就 WAIT。</p>
+                                <div id="setup-detector-summary" class="setup-detector-summary"></div>
+                                <div class="button-row">
+                                    <button type="button" class="primary-btn" data-action="detect-setup">根據觀察判斷 Setup</button>
+                                </div>
+                            </div>
+                            <h3>由盤面事實決定 Setup</h3>
+                            <p>這一步不需要你選 FIRST TRAP / VSOP / CLOUD TO CLOUD / KIM。你只需要如實填寫觀察，程式會把最合理的 setup 推出來。</p>
                             <div class="answer-list">
                                 <button class="answer-btn warn" data-action="q4" data-id="first_trap" data-name="FIRST TRAP">
                                     <span class="answer-icon">T</span>
@@ -1146,6 +1213,15 @@
                                 <button type="button" class="indicator-chip bad" data-indicator-group="cloud" data-indicator-value="bearish">Cloud 紅 / 偏空</button>
                                 <button type="button" class="indicator-chip warn" data-indicator-group="cloud" data-indicator-value="choppy">Cloud 亂 / 穿越</button>
                                 <button type="button" class="indicator-chip" data-indicator-group="cloud" data-indicator-value="unknown">未確認</button>
+                            </div>
+                        </div>
+
+                        <div class="indicator-section">
+                            <h3>CLOUD TO CLOUD 路徑</h3>
+                            <div class="chip-grid">
+                                <button type="button" class="indicator-chip good" data-indicator-group="cloudPath" data-indicator-value="clear">下一個 Cloud 目標清晰</button>
+                                <button type="button" class="indicator-chip bad" data-indicator-group="cloudPath" data-indicator-value="blocked">中間有阻力 / 不乾淨</button>
+                                <button type="button" class="indicator-chip" data-indicator-group="cloudPath" data-indicator-value="unknown">未確認</button>
                             </div>
                         </div>
 
@@ -1341,6 +1417,7 @@
 
         const defaultIndicatorState = () => ({
             cloud: "unknown",
+            cloudPath: "unknown",
             trap: "none",
             vsop: {
                 imbalance: false,
@@ -1358,6 +1435,7 @@
             trendName: "未知",
             setupId: "",
             setupName: "未知",
+            setupDetection: null,
             decisionText: "",
             tradeType: "",
             reasonText: "",
@@ -1382,6 +1460,11 @@
                 bearish: "Cloud 紅 / 偏空",
                 choppy: "Cloud 亂 / 穿越",
                 unknown: "Cloud 未確認"
+            },
+            cloudPath: {
+                clear: "下一個 Cloud 目標清晰",
+                blocked: "中間有阻力 / 不乾淨",
+                unknown: "CLOUD TO CLOUD 未確認"
             },
             trap: {
                 none: "無 Trap",
@@ -1444,6 +1527,7 @@
             tvChartShell: document.getElementById("tv-chart-shell"),
             tvWidgetRoot: document.getElementById("tv-widget-root"),
             indicatorSummary: document.getElementById("indicator-summary"),
+            setupDetectorSummary: document.getElementById("setup-detector-summary"),
             indicatorNote: document.getElementById("indicator-note"),
             form: document.getElementById("save-form"),
             confidence: document.getElementById("confidence"),
@@ -1625,6 +1709,7 @@
             const vsop = raw && typeof raw.vsop === "object" ? raw.vsop : {};
             return {
                 cloud: indicatorLabels.cloud[String(raw?.cloud || "")] ? String(raw.cloud) : defaults.cloud,
+                cloudPath: indicatorLabels.cloudPath[String(raw?.cloudPath || "")] ? String(raw.cloudPath) : defaults.cloudPath,
                 trap: indicatorLabels.trap[String(raw?.trap || "")] ? String(raw.trap) : defaults.trap,
                 vsop: {
                     imbalance: Boolean(vsop.imbalance),
@@ -1646,6 +1731,7 @@
             const vsopText = `${activeVsop.length}/4${activeVsop.length ? ` (${activeVsop.join(", ")})` : ""}`;
             const parts = [
                 `Cloud: ${indicatorLabels.cloud[clean.cloud]}`,
+                `C2C: ${indicatorLabels.cloudPath[clean.cloudPath]}`,
                 `Trap: ${indicatorLabels.trap[clean.trap]}`,
                 `VSOP: ${vsopText}`,
                 `Kim: ${indicatorLabels.kim[clean.kim]}`
@@ -1664,6 +1750,7 @@
             });
             els.indicatorNote.value = indicatorState.note;
             els.indicatorSummary.textContent = indicatorSummaryText(indicatorState);
+            renderSetupDetectorPreview();
         }
 
         function setIndicatorGroup(group, value) {
@@ -1698,6 +1785,156 @@
             showToast("指標快填已寫入計劃筆記。");
         }
 
+        function countVsopSteps(snapshot) {
+            return Object.values(snapshot.vsop).filter(Boolean).length;
+        }
+
+        function trendBiasLabel() {
+            if (appState.trendId === "uptrend") return "Uptrend";
+            if (appState.trendId === "downtrend") return "Downtrend";
+            if (appState.trendId === "range") return "Range";
+            return "未確認趨勢";
+        }
+
+        function isCloudAligned(snapshot) {
+            if (appState.trendId === "uptrend") return snapshot.cloud === "bullish";
+            if (appState.trendId === "downtrend") return snapshot.cloud === "bearish";
+            if (appState.trendId === "range") return snapshot.cloud === "bullish" || snapshot.cloud === "bearish";
+            return false;
+        }
+
+        function isKimAligned(snapshot) {
+            return (appState.trendId === "uptrend" && snapshot.kim === "rkim_bull")
+                || (appState.trendId === "downtrend" && snapshot.kim === "kim_bear");
+        }
+
+        function detectSetupCandidates(snapshotInput = indicatorState) {
+            const snapshot = normalizeIndicatorSnapshot(snapshotInput);
+            const vsopCount = countVsopSteps(snapshot);
+            const candidates = [];
+            const blockers = [];
+            const addCandidate = (id, name, score, reasons) => {
+                candidates.push({ id, name, score, reasons });
+            };
+
+            if (snapshot.trap === "first_trap") {
+                addCandidate("first_trap", "FIRST TRAP", 96, [
+                    "Trap 已標記為 FIRST TRAP 成立",
+                    "優先處理假突破、掃 liquidity 後 reclaim 的入場"
+                ]);
+            } else if (snapshot.trap === "bull_trap" || snapshot.trap === "bear_trap") {
+                addCandidate("first_trap", "FIRST TRAP", 78, [
+                    "已見到 Trap 方向",
+                    "仍要確認 reclaim 關鍵位，否則只屬候選"
+                ]);
+            } else {
+                blockers.push("FIRST TRAP：未見 Trap / reclaim 證據。");
+            }
+
+            if (vsopCount === 4) {
+                addCandidate("vsop", "VSOP", 92, [
+                    "VSOP 四步齊全",
+                    "Imbalance、FVG、Sweep、Back to FVG 都已確認"
+                ]);
+            } else {
+                blockers.push(`VSOP：目前只有 ${vsopCount}/4，未完成前不當作正式 setup。`);
+            }
+
+            if (snapshot.cloudPath === "clear" && isCloudAligned(snapshot)) {
+                addCandidate("cloud_to_cloud", "CLOUD TO CLOUD", appState.trendId === "range" ? 74 : 84, [
+                    "下一個 Cloud 目標清晰",
+                    `${trendBiasLabel()} 與 Cloud 狀態沒有明顯衝突`
+                ]);
+            } else if (snapshot.cloudPath === "blocked") {
+                blockers.push("CLOUD TO CLOUD：中間有阻力 / 路徑不乾淨。");
+            } else if (snapshot.cloudPath === "clear") {
+                blockers.push("CLOUD TO CLOUD：路徑清晰，但 Cloud 顏色與趨勢未對齊。");
+            } else {
+                blockers.push("CLOUD TO CLOUD：未確認下一個 Cloud 目標是否清晰。");
+            }
+
+            if (isKimAligned(snapshot)) {
+                addCandidate("kim_setup", "KIM SETUP / R-KIM", 88, [
+                    "Kim / R-Kim 與大方向一致",
+                    "適合等待攻擊段、弱回調、突破 trigger"
+                ]);
+            } else if (snapshot.kim === "rkim_bull" || snapshot.kim === "kim_bear") {
+                blockers.push("KIM：訊號與目前大方向不一致，容易變成主觀逆勢。");
+            } else if (snapshot.kim === "unclear") {
+                blockers.push("KIM：標記為逆勢 / 不清，不應硬做。");
+            } else {
+                blockers.push("KIM：未見清晰 Kim / R-Kim。");
+            }
+
+            candidates.sort((a, b) => b.score - a.score);
+            return { snapshot, vsopCount, candidates, blockers };
+        }
+
+        function setupDetectionSummaryText(detection) {
+            if (!detection.candidates.length) {
+                return `沒有客觀 setup 成立。${detection.blockers.slice(0, 3).join(" ")}`;
+            }
+            const best = detection.candidates[0];
+            const alternatives = detection.candidates.slice(1).map(item => item.name).join(", ");
+            return `${best.name} (${best.score}/100)：${best.reasons.join("；")}${alternatives ? `。次選：${alternatives}` : ""}`;
+        }
+
+        function renderSetupDetectorPreview() {
+            if (!els.setupDetectorSummary) return;
+            const detection = detectSetupCandidates();
+            const rows = detection.candidates.length
+                ? detection.candidates.slice(0, 3).map((item, index) => `
+                    <div class="setup-candidate ${index === 0 ? "top" : ""}">
+                        <strong>${escapeHtml(item.name)} · ${item.score}/100</strong>
+                        <span>${escapeHtml(item.reasons.join("；"))}</span>
+                    </div>
+                `).join("")
+                : `<div class="setup-candidate blocked">
+                    <strong>未有客觀 setup</strong>
+                    <span>${escapeHtml(detection.blockers.slice(0, 4).join(" "))}</span>
+                </div>`;
+
+            els.setupDetectorSummary.innerHTML = `
+                <div class="setup-candidate">
+                    <strong>目前觀察</strong>
+                    <span>${escapeHtml(indicatorSummaryText(detection.snapshot))}</span>
+                </div>
+                ${rows}
+            `;
+        }
+
+        function answerDetectedSetup() {
+            syncIndicatorNote();
+            const detection = detectSetupCandidates();
+            appState.setupDetection = {
+                summary: setupDetectionSummaryText(detection),
+                candidates: detection.candidates,
+                blockers: detection.blockers
+            };
+
+            if (!detection.candidates.length) {
+                appState.setupId = "none";
+                appState.setupName = "沒有客觀 Setup";
+                appState.answers.setup = "auto_none";
+                appState.reasonText = setupDetectionSummaryText(detection);
+                showWaitResult("客觀 Setup 不成立", "目前觀察不足以支持 FIRST TRAP / VSOP / CLOUD TO CLOUD / KIM。這不是錯過機會，而是避免把想像當成 setup。");
+                return;
+            }
+
+            const best = detection.candidates[0];
+            appState.setupId = best.id;
+            appState.setupName = best.name;
+            appState.answers.setup = best.id;
+            appState.reasonText = `客觀 Setup 偵測：${setupDetectionSummaryText(detection)}`;
+
+            if (appState.trendId === "range") {
+                showScreen("rangeSide", "Range Edge");
+                return;
+            }
+
+            showExecuteResult();
+        }
+
         function normalizeRecord(raw) {
             if (!raw || typeof raw !== "object") return null;
             const decisionText = String(raw.decisionText || "").trim();
@@ -1708,6 +1945,7 @@
             const answers = raw.answers && typeof raw.answers === "object" ? raw.answers : {};
             const chartContext = raw.chartContext && typeof raw.chartContext === "object" ? raw.chartContext : {};
             const indicatorSnapshot = raw.indicatorSnapshot && typeof raw.indicatorSnapshot === "object" ? raw.indicatorSnapshot : {};
+            const setupDetection = raw.setupDetection && typeof raw.setupDetection === "object" ? raw.setupDetection : null;
 
             return {
                 id: String(raw.id || makeId()),
@@ -1721,6 +1959,18 @@
                 trendName: String(raw.trendName || "未知"),
                 setupId: String(raw.setupId || ""),
                 setupName: String(raw.setupName || "未知"),
+                setupDetection: setupDetection ? {
+                    summary: String(setupDetection.summary || ""),
+                    candidates: Array.isArray(setupDetection.candidates)
+                        ? setupDetection.candidates.map(item => ({
+                            id: String(item?.id || ""),
+                            name: String(item?.name || ""),
+                            score: Number(item?.score || 0),
+                            reasons: Array.isArray(item?.reasons) ? item.reasons.map(reason => String(reason)) : []
+                        })).filter(item => item.id && item.name)
+                        : [],
+                    blockers: Array.isArray(setupDetection.blockers) ? setupDetection.blockers.map(item => String(item)) : []
+                } : null,
                 decisionText,
                 tradeType: String(raw.tradeType || ""),
                 reasonText: String(raw.reasonText || ""),
@@ -1827,6 +2077,7 @@
                 showWaitResult("撞上大級別阻力", "前方沒有獲利空間。記住大控制小，不要用小級別 Setup 去撞擊大級別的牆壁。");
                 return;
             }
+            renderSetupDetectorPreview();
             showScreen("q4", "Step 4/4");
         }
 
@@ -2042,6 +2293,7 @@
                 trendName: appState.trendName,
                 setupId: appState.setupId,
                 setupName: appState.setupName,
+                setupDetection: appState.setupDetection,
                 decisionText: appState.decisionText,
                 tradeType: appState.tradeType,
                 reasonText: appState.reasonText,
@@ -2113,6 +2365,7 @@
                     record.tags.join(" "),
                     record.tradeType,
                     record.reasonText,
+                    record.setupDetection?.summary,
                     record.chartContext?.tvSymbol,
                     record.chartContext?.tvInterval,
                     indicatorSummaryText(record.indicatorSnapshot)
@@ -2178,6 +2431,7 @@
             const tvSymbol = record.chartContext?.tvSymbol || "";
             const tvInterval = record.chartContext?.tvInterval ? intervalLabel(record.chartContext.tvInterval) : "";
             const indicatorSummary = indicatorSummaryText(record.indicatorSnapshot);
+            const setupDetection = record.setupDetection?.summary || "";
             return `
                 <article class="record-card ${directionClass(record)}" data-record-id="${escapeHtml(record.id)}">
                     <div class="record-main">
@@ -2208,6 +2462,7 @@
                             <div class="detail"><span>TV TF</span><b>${escapeHtml(tvInterval || "-")}</b></div>
                         </div>
                         <p class="record-note"><b>核心邏輯：</b>${escapeHtml(record.reasonText || "-")}</p>
+                        ${setupDetection ? `<p class="record-note"><b>Setup 偵測：</b>${escapeHtml(setupDetection)}</p>` : ""}
                         <p class="record-note"><b>指標快填：</b>${escapeHtml(indicatorSummary)}</p>
                         ${record.planNote ? `<p class="record-note"><b>計劃：</b>${escapeHtml(record.planNote)}</p>` : ""}
                         ${record.screenshot ? `<p class="record-note"><b>截圖/備註：</b>${escapeHtml(record.screenshot)}</p>` : ""}
@@ -2265,6 +2520,7 @@
                 `方向：${directionKey(record)} / ${record.tradeType}`,
                 `趨勢：${record.trendName}`,
                 `Setup：${record.setupName}`,
+                `Setup 偵測：${record.setupDetection?.summary || "-"}`,
                 `TradingView：${record.chartContext?.tvSymbol || "-"} ${record.chartContext?.tvInterval ? intervalLabel(record.chartContext.tvInterval) : ""}`,
                 `指標快填：${indicatorSummaryText(record.indicatorSnapshot)}`,
                 `邏輯：${record.reasonText}`,
@@ -2291,7 +2547,7 @@
         function exportCsv() {
             const headers = [
                 "tradeDate", "symbol", "session", "timeframe", "decision", "tradeType",
-                "trend", "setup", "reason", "entry", "stopLoss", "takeProfit", "rr",
+                "trend", "setup", "setupDetection", "reason", "entry", "stopLoss", "takeProfit", "rr",
                 "tvSymbol", "tvInterval", "tvLayoutUrl", "indicatorSummary", "confidence", "outcome", "planNote", "reviewNote", "tags", "createdAt"
             ];
             const rows = records.map(record => [
@@ -2303,6 +2559,7 @@
                 record.tradeType,
                 record.trendName,
                 record.setupName,
+                record.setupDetection?.summary || "",
                 record.reasonText,
                 record.risk.entry,
                 record.risk.stopLoss,
@@ -2418,6 +2675,7 @@
                     if (action === "q2") answerQ2(button.dataset.id, button.dataset.name);
                     if (action === "q3") answerQ3(button.dataset.blocked === "true");
                     if (action === "q4") answerQ4(button.dataset.id, button.dataset.name);
+                    if (action === "detect-setup") answerDetectedSetup();
                     if (action === "range-side") answerRangeSide(button.dataset.side);
                 });
             });
