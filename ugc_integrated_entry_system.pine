@@ -1,0 +1,407 @@
+//@version=6
+indicator("UGC Integrated Entry System [Proxy]", shorttitle = "UGC Entry System", overlay = true, max_labels_count = 100, max_lines_count = 100)
+
+// Integrated TradingView indicator based on the provided notes.
+// It combines trend context, Cloud/TENET, VSOP, Kim/R-Kim, PMH/PML catalyst, R:R, and a five-question drill.
+// This is a strict proxy implementation, not the proprietary UGC/Renaissance formula and not financial advice.
+plot(close, title = "Compiler keepalive", display = display.none)
+
+// ---------------- Inputs
+groupTrend = "Trend Engine"
+tfMajor1 = input.timeframe("240", "Major trend TF 1", group = groupTrend)
+tfMajor2 = input.timeframe("60", "Major trend TF 2", group = groupTrend)
+emaFastLen = input.int(9, "Cloud fast EMA", minval = 1, group = groupTrend)
+emaSlowLen = input.int(21, "Cloud slow EMA", minval = 2, group = groupTrend)
+pivotLen = input.int(3, "Confirmed pivot strength", minval = 1, maxval = 20, group = groupTrend)
+renLen = input.int(100, "Renaissance proxy length", minval = 20, group = groupTrend)
+renDev = input.float(1.5, "Grey/light band stdev", minval = 0.1, step = 0.1, group = groupTrend)
+renDeepDev = input.float(2.5, "Deep imbalance stdev", minval = 0.2, step = 0.1, group = groupTrend)
+renSlopeBars = input.int(5, "Grey band slope bars", minval = 1, maxval = 50, group = groupTrend)
+diLen = input.int(14, "DI length", minval = 2, group = groupTrend)
+adxSmooth = input.int(14, "ADX smoothing", minval = 2, group = groupTrend)
+adxMin = input.float(18.0, "Minimum ADX", minval = 1.0, step = 0.5, group = groupTrend)
+widthLen = input.int(50, "Band width average length", minval = 5, group = groupTrend)
+widthRatio = input.float(0.85, "Minimum width ratio", minval = 0.1, step = 0.05, group = groupTrend)
+minTrendScore = input.int(4, "Trend score needed", minval = 1, maxval = 5, group = groupTrend)
+conflictLimit = input.int(3, "Conflict score limit", minval = 1, maxval = 5, group = groupTrend)
+
+groupSetup = "Setup Engine"
+atrLen = input.int(14, "ATR length", minval = 1, group = groupSetup)
+impulseAtrMult = input.float(1.1, "Kim/R-Kim impulse body ATR", minval = 0.1, step = 0.1, group = groupSetup)
+impulseLookback = input.int(5, "Impulse breakout lookback", minval = 2, maxval = 50, group = groupSetup)
+minSetupBars = input.int(1, "Minimum pullback bars", minval = 1, maxval = 20, group = groupSetup)
+maxSetupBars = input.int(12, "Maximum Kim/R-Kim wait bars", minval = 2, maxval = 100, group = groupSetup)
+maxPullbackAtr = input.float(1.2, "Weak pullback max ATR", minval = 0.1, step = 0.1, group = groupSetup)
+tenetLookback = input.int(8, "Cloud/TENET hold lookback", minval = 2, maxval = 50, group = groupSetup)
+liquidityLookback = input.int(20, "Liquidity sweep lookback", minval = 5, maxval = 200, group = groupSetup)
+sweepValidBars = input.int(8, "Sweep valid bars", minval = 1, maxval = 100, group = groupSetup)
+fvgMaxBars = input.int(80, "FVG valid bars", minval = 5, maxval = 500, group = groupSetup)
+trapMaxBars = input.int(50, "TENET trap valid bars", minval = 5, maxval = 300, group = groupSetup)
+minSetupScore = input.int(4, "Setup score needed", minval = 1, maxval = 5, group = groupSetup)
+
+groupRR = "Risk / Reward"
+rrLookback = input.int(60, "Target level lookback", minval = 10, maxval = 500, group = groupRR)
+minRR = input.float(1.5, "Minimum R:R", minval = 0.1, step = 0.1, group = groupRR)
+targetAtrFloor = input.float(1.5, "Minimum target ATR distance", minval = 0.1, step = 0.1, group = groupRR)
+stopAtrBuffer = input.float(0.2, "Stop buffer ATR", minval = 0.0, step = 0.1, group = groupRR)
+
+groupPM = "PMH / PML Catalyst"
+usePmhPml = input.bool(true, "Use PMH/PML catalyst", group = groupPM)
+useReferencePmhPml = input.bool(true, "Use QQQ reference for NQ/NAS100", group = groupPM)
+referenceSymbol = input.symbol("NASDAQ:QQQ", "Reference symbol", group = groupPM)
+premarketSession = input.session("0400-0929", "Premarket session", group = groupPM)
+
+groupView = "Display"
+showPanel = input.bool(true, "Show right checklist panel", group = groupView)
+panelPositionInput = input.string("Middle Right", "Panel position", options = ["Top Right", "Middle Right", "Bottom Right", "Top Left", "Bottom Left"], group = groupView)
+showFallbackLabel = input.bool(true, "Show fallback chart label", group = groupView)
+showCloud = input.bool(true, "Show EMA Cloud", group = groupView)
+showRenaissance = input.bool(false, "Show Renaissance proxy bands", group = groupView)
+showPmhPml = input.bool(false, "Show local PMH/PML", group = groupView)
+showBackground = input.bool(true, "Tint background by final decision", group = groupView)
+
+f_panel_position(string pos) =>
+    switch pos
+        "Top Right" => position.top_right
+        "Middle Right" => position.middle_right
+        "Bottom Right" => position.bottom_right
+        "Top Left" => position.top_left
+        => position.bottom_left
+
+var table panel = table.new(f_panel_position(panelPositionInput), 4, 18, border_width = 1, frame_width = 1, frame_color = color.new(color.white, 40), border_color = color.new(color.white, 70))
+
+f_mark(bool value) =>
+    value ? "✓" : "✕"
+
+f_score_bg(bool value) =>
+    value ? color.new(color.lime, 0) : color.new(color.red, 0)
+
+f_section_bg() =>
+    color.new(color.rgb(55, 59, 72), 0)
+
+f_dark_bg() =>
+    color.new(color.rgb(8, 10, 14), 5)
+
+f_item_bg() =>
+    color.new(color.rgb(16, 18, 24), 5)
+
+f_decision_bg(bool bull, bool bear) =>
+    bull ? color.new(color.rgb(52, 175, 75), 0) : bear ? color.new(color.rgb(210, 55, 65), 0) : color.new(color.rgb(135, 139, 150), 0)
+
+f_cell(int col, int row, string cellText, color bg, color tc, string align) =>
+    table.cell(panel, col, row, cellText, text_color = tc, bgcolor = bg, text_halign = align, text_size = size.normal)
+
+f_header(int row, string title, string bullTitle, string bearTitle, string itemTitle) =>
+    f_cell(0, row, title, f_section_bg(), color.white, text.align_center)
+    f_cell(1, row, bullTitle, f_section_bg(), color.white, text.align_center)
+    f_cell(2, row, bearTitle, f_section_bg(), color.white, text.align_center)
+    f_cell(3, row, itemTitle, f_section_bg(), color.white, text.align_center)
+
+f_check_row(int row, string idx, bool bull, bool bear, string item) =>
+    f_cell(0, row, idx, f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(1, row, f_mark(bull), f_score_bg(bull), color.white, text.align_center)
+    f_cell(2, row, f_mark(bear), f_score_bg(bear), color.white, text.align_center)
+    f_cell(3, row, item, f_item_bg(), color.rgb(190, 196, 215), text.align_center)
+
+// ---------------- Trend Engine
+emaFast = ta.ema(close, emaFastLen)
+emaSlow = ta.ema(close, emaSlowLen)
+cloudTop = math.max(emaFast, emaSlow)
+cloudBot = math.min(emaFast, emaSlow)
+chartBull = emaFast > emaSlow and close > cloudTop
+chartBear = emaFast < emaSlow and close < cloudBot
+
+tf1Fast = request.security(syminfo.tickerid, tfMajor1, ta.ema(close, emaFastLen), barmerge.gaps_off, barmerge.lookahead_off)
+tf1Slow = request.security(syminfo.tickerid, tfMajor1, ta.ema(close, emaSlowLen), barmerge.gaps_off, barmerge.lookahead_off)
+tf2Fast = request.security(syminfo.tickerid, tfMajor2, ta.ema(close, emaFastLen), barmerge.gaps_off, barmerge.lookahead_off)
+tf2Slow = request.security(syminfo.tickerid, tfMajor2, ta.ema(close, emaSlowLen), barmerge.gaps_off, barmerge.lookahead_off)
+mtfBull = tf1Fast > tf1Slow and tf2Fast > tf2Slow
+mtfBear = tf1Fast < tf1Slow and tf2Fast < tf2Slow
+
+ph = ta.pivothigh(high, pivotLen, pivotLen)
+pl = ta.pivotlow(low, pivotLen, pivotLen)
+var float lastHigh = na
+var float prevHigh = na
+var float lastLow = na
+var float prevLow = na
+if not na(ph)
+    prevHigh := lastHigh
+    lastHigh := ph
+if not na(pl)
+    prevLow := lastLow
+    lastLow := pl
+
+paBull = not na(prevHigh) and not na(prevLow) and lastHigh > prevHigh and lastLow > prevLow
+paBear = not na(prevHigh) and not na(prevLow) and lastHigh < prevHigh and lastLow < prevLow
+
+basis = ta.linreg(close, renLen, 0)
+dev = ta.stdev(close, renLen)
+upperLight = basis + dev * renDev
+lowerLight = basis - dev * renDev
+upperDeep = basis + dev * renDeepDev
+lowerDeep = basis - dev * renDeepDev
+renSlope = basis - basis[renSlopeBars]
+greyBull = not na(renSlope) and close > basis and renSlope > 0
+greyBear = not na(renSlope) and close < basis and renSlope < 0
+
+[plusDI, minusDI, adxValue] = ta.dmi(diLen, adxSmooth)
+bandWidth = math.abs(upperLight - lowerLight) / math.max(math.abs(basis), syminfo.mintick)
+bandWidthAvg = ta.sma(bandWidth, widthLen)
+rangeOk = not na(adxValue) and not na(bandWidthAvg) and adxValue >= adxMin and bandWidth >= bandWidthAvg * widthRatio
+
+tenetTrendBull = ta.lowest(low, tenetLookback) <= cloudTop and close > cloudTop and emaFast >= emaSlow
+tenetTrendBear = ta.highest(high, tenetLookback) >= cloudBot and close < cloudBot and emaFast <= emaSlow
+
+bullTrendScore = (chartBull ? 1 : 0) + (paBull ? 1 : 0) + (greyBull ? 1 : 0) + (mtfBull ? 1 : 0) + (tenetTrendBull ? 1 : 0)
+bearTrendScore = (chartBear ? 1 : 0) + (paBear ? 1 : 0) + (greyBear ? 1 : 0) + (mtfBear ? 1 : 0) + (tenetTrendBear ? 1 : 0)
+upTrend = bullTrendScore >= minTrendScore and bearTrendScore < conflictLimit and rangeOk
+downTrend = bearTrendScore >= minTrendScore and bullTrendScore < conflictLimit and rangeOk
+
+// ---------------- PMH / PML
+f_premarket_levels() =>
+    inPm = not na(time(timeframe.period, premarketSession))
+    newDay = ta.change(time("D")) != 0
+    var float pmHigh = na
+    var float pmLow = na
+    if newDay
+        pmHigh := na
+        pmLow := na
+    if inPm
+        pmHigh := na(pmHigh) ? high : math.max(pmHigh, high)
+        pmLow := na(pmLow) ? low : math.min(pmLow, low)
+    [pmHigh, pmLow]
+
+[localPmh, localPml] = f_premarket_levels()
+[refPmh, refPml] = request.security(referenceSymbol, timeframe.period, f_premarket_levels(), barmerge.gaps_off, barmerge.lookahead_off)
+refClose = request.security(referenceSymbol, timeframe.period, close, barmerge.gaps_off, barmerge.lookahead_off)
+localPmhCross = ta.crossover(close, localPmh)
+localPmlCross = ta.crossunder(close, localPml)
+refPmhCross = ta.crossover(refClose, refPmh)
+refPmlCross = ta.crossunder(refClose, refPml)
+pmhBreakout = usePmhPml and (useReferencePmhPml ? not na(refPmh) and refPmhCross : not na(localPmh) and localPmhCross)
+pmlBreakdown = usePmhPml and (useReferencePmhPml ? not na(refPml) and refPmlCross : not na(localPml) and localPmlCross)
+catalystText = pmhBreakout ? "PMH Breakout" : pmlBreakdown ? "PML Breakdown" : useReferencePmhPml ? "QQQ ref" : "Local PM"
+
+// ---------------- Kim / R-Kim and Pullback
+atr = ta.atr(atrLen)
+body = math.abs(close - open)
+bodyHigh = math.max(open, close)
+bodyLow = math.min(open, close)
+bullImpulse = close > open and body >= atr * impulseAtrMult and close > ta.highest(high, impulseLookback)[1]
+bearImpulse = close < open and body >= atr * impulseAtrMult and close < ta.lowest(low, impulseLookback)[1]
+
+var bool bullSeqActive = false
+var float bullTrigger = na
+var float bullLowestAfter = na
+var int bullImpulseBar = na
+var bool bearSeqActive = false
+var float bearTrigger = na
+var float bearHighestAfter = na
+var int bearImpulseBar = na
+
+if bullImpulse
+    bullSeqActive := true
+    bullTrigger := bodyHigh
+    bullLowestAfter := low
+    bullImpulseBar := bar_index
+if bearImpulse
+    bearSeqActive := true
+    bearTrigger := bodyLow
+    bearHighestAfter := high
+    bearImpulseBar := bar_index
+
+if bullSeqActive
+    bullLowestAfter := math.min(bullLowestAfter, low)
+if bearSeqActive
+    bearHighestAfter := math.max(bearHighestAfter, high)
+
+bullSeqAge = bullSeqActive and not na(bullImpulseBar) ? bar_index - bullImpulseBar : 100000
+bearSeqAge = bearSeqActive and not na(bearImpulseBar) ? bar_index - bearImpulseBar : 100000
+bullWeakPullback = bullSeqActive and bullLowestAfter > bullTrigger - atr * maxPullbackAtr
+bearWeakBounce = bearSeqActive and bearHighestAfter < bearTrigger + atr * maxPullbackAtr
+rKimLong = upTrend and bullSeqActive and bullSeqAge >= minSetupBars and bullSeqAge <= maxSetupBars and bullWeakPullback and close > bullTrigger and close[1] <= bullTrigger
+kimShort = downTrend and bearSeqActive and bearSeqAge >= minSetupBars and bearSeqAge <= maxSetupBars and bearWeakBounce and close < bearTrigger and close[1] >= bearTrigger
+if rKimLong or bullSeqAge > maxSetupBars
+    bullSeqActive := false
+if kimShort or bearSeqAge > maxSetupBars
+    bearSeqActive := false
+
+pullbackLong = upTrend and close > cloudTop and ta.lowest(low, tenetLookback) <= cloudTop
+pullbackShort = downTrend and close < cloudBot and ta.highest(high, tenetLookback) >= cloudBot
+
+// ---------------- VSOP
+var float bullFvgLow = na
+var float bullFvgHigh = na
+var int bullFvgBar = na
+var float bearFvgLow = na
+var float bearFvgHigh = na
+var int bearFvgBar = na
+
+bullFvgCreated = not na(high[2]) and low > high[2]
+bearFvgCreated = not na(low[2]) and high < low[2]
+if bullFvgCreated
+    bullFvgLow := high[2]
+    bullFvgHigh := low
+    bullFvgBar := bar_index
+if bearFvgCreated
+    bearFvgLow := high
+    bearFvgHigh := low[2]
+    bearFvgBar := bar_index
+
+if not na(bullFvgBar) and bar_index - bullFvgBar > fvgMaxBars
+    bullFvgLow := na
+    bullFvgHigh := na
+    bullFvgBar := na
+if not na(bearFvgBar) and bar_index - bearFvgBar > fvgMaxBars
+    bearFvgLow := na
+    bearFvgHigh := na
+    bearFvgBar := na
+
+liquidityLow = ta.lowest(low, liquidityLookback)[1]
+liquidityHigh = ta.highest(high, liquidityLookback)[1]
+sweepDown = not na(liquidityLow) and low < liquidityLow and close > liquidityLow
+sweepUp = not na(liquidityHigh) and high > liquidityHigh and close < liquidityHigh
+var int sweepDownBar = na
+var int sweepUpBar = na
+if sweepDown
+    sweepDownBar := bar_index
+if sweepUp
+    sweepUpBar := bar_index
+recentSweepDown = not na(sweepDownBar) and bar_index - sweepDownBar <= sweepValidBars
+recentSweepUp = not na(sweepUpBar) and bar_index - sweepUpBar <= sweepValidBars
+
+bullFvgLive = not na(bullFvgBar)
+bearFvgLive = not na(bearFvgBar)
+touchBullFvg = bullFvgLive and low <= bullFvgHigh and high >= bullFvgLow
+touchBearFvg = bearFvgLive and high >= bearFvgLow and low <= bearFvgHigh
+vsopLong = upTrend and recentSweepDown and touchBullFvg and close > bullFvgLow
+vsopShort = downTrend and recentSweepUp and touchBearFvg and close < bearFvgHigh
+
+// ---------------- Trap / TENET
+var float tenetLongLevel = na
+var int tenetLongBar = na
+var float tenetShortLevel = na
+var int tenetShortBar = na
+
+bearTrapSeed = upTrend and low < cloudBot and close > cloudTop and close > open
+bullTrapSeed = downTrend and high > cloudTop and close < cloudBot and close < open
+if bearTrapSeed
+    tenetLongLevel := high
+    tenetLongBar := bar_index
+if bullTrapSeed
+    tenetShortLevel := low
+    tenetShortBar := bar_index
+
+tenetLongLive = not na(tenetLongBar) and bar_index - tenetLongBar <= trapMaxBars
+tenetShortLive = not na(tenetShortBar) and bar_index - tenetShortBar <= trapMaxBars
+trapLong = upTrend and tenetLongLive and bar_index > tenetLongBar and close > tenetLongLevel and close[1] <= tenetLongLevel
+trapShort = downTrend and tenetShortLive and bar_index > tenetShortBar and close < tenetShortLevel and close[1] >= tenetShortLevel
+tenetLongOk = tenetTrendBull or trapLong
+tenetShortOk = tenetTrendBear or trapShort
+
+if trapLong or not tenetLongLive
+    tenetLongLevel := na
+    tenetLongBar := na
+if trapShort or not tenetShortLive
+    tenetShortLevel := na
+    tenetShortBar := na
+
+// ---------------- R:R
+recentResistance = ta.highest(high, rrLookback)[1]
+recentSupport = ta.lowest(low, rrLookback)[1]
+safeLastLow = na(lastLow) ? ta.lowest(low, pivotLen * 3) : lastLow
+safeLastHigh = na(lastHigh) ? ta.highest(high, pivotLen * 3) : lastHigh
+longStop = math.min(safeLastLow, cloudBot) - atr * stopAtrBuffer
+shortStop = math.max(safeLastHigh, cloudTop) + atr * stopAtrBuffer
+longTarget = math.max(recentResistance, close + atr * targetAtrFloor)
+shortTarget = math.min(recentSupport, close - atr * targetAtrFloor)
+longRisk = math.max(close - longStop, syminfo.mintick)
+shortRisk = math.max(shortStop - close, syminfo.mintick)
+rrLong = math.max(longTarget - close, 0) / longRisk
+rrShort = math.max(close - shortTarget, 0) / shortRisk
+rrLongOk = rrLong >= minRR
+rrShortOk = rrShort >= minRR
+
+// ---------------- Final scoring
+setupPullLong = pullbackLong or rKimLong or pmhBreakout
+setupPullShort = pullbackShort or kimShort or pmlBreakdown
+setupLongScore = (upTrend ? 1 : 0) + (setupPullLong ? 1 : 0) + (tenetLongOk ? 1 : 0) + (vsopLong ? 1 : 0) + (rrLongOk ? 1 : 0)
+setupShortScore = (downTrend ? 1 : 0) + (setupPullShort ? 1 : 0) + (tenetShortOk ? 1 : 0) + (vsopShort ? 1 : 0) + (rrShortOk ? 1 : 0)
+finalLong = barstate.isconfirmed and upTrend and setupLongScore >= minSetupScore and setupLongScore > setupShortScore
+finalShort = barstate.isconfirmed and downTrend and setupShortScore >= minSetupScore and setupShortScore > setupLongScore
+finalWait = not finalLong and not finalShort
+
+trendText = upTrend ? "UPTREND 做多優先" : downTrend ? "DOWNTREND 做空優先" : "NO TREND 觀望"
+setupText = finalLong ? "做多 LONG" : finalShort ? "做空 SHORT" : "觀望 WAIT"
+mainReason = finalLong ? (rKimLong ? "R-Kim" : vsopLong ? "VSOP" : trapLong ? "Trap/TENET" : pmhBreakout ? "PMH" : "Trend setup") : finalShort ? (kimShort ? "Kim" : vsopShort ? "VSOP" : trapShort ? "Trap/TENET" : pmlBreakdown ? "PML" : "Trend setup") : "Wait for clean edge"
+
+// ---------------- Chart visuals
+cloudColor = emaFast >= emaSlow ? color.new(color.lime, 84) : color.new(color.red, 84)
+pFast = plot(showCloud ? emaFast : na, "Cloud EMA Fast", color = emaFast >= emaSlow ? color.lime : color.red, linewidth = 2)
+pSlow = plot(showCloud ? emaSlow : na, "Cloud EMA Slow", color = color.new(color.gray, 0), linewidth = 2)
+fill(pFast, pSlow, color = cloudColor, title = "Cloud Fill")
+
+plot(showRenaissance ? basis : na, "Grey Band Basis", color = color.gray, linewidth = 2)
+plot(showRenaissance ? upperLight : na, "Upper Light Band", color = color.new(color.red, 45))
+plot(showRenaissance ? lowerLight : na, "Lower Light Band", color = color.new(color.green, 45))
+plot(showRenaissance ? upperDeep : na, "Upper Deep Imbalance", color = color.new(color.red, 5))
+plot(showRenaissance ? lowerDeep : na, "Lower Deep Imbalance", color = color.new(color.green, 5))
+
+plot(showPmhPml and not useReferencePmhPml ? localPmh : na, "PMH", color = color.new(color.red, 0), style = plot.style_linebr, linewidth = 1)
+plot(showPmhPml and not useReferencePmhPml ? localPml : na, "PML", color = color.new(color.lime, 0), style = plot.style_linebr, linewidth = 1)
+
+plotshape(finalLong, title = "Final Long", style = shape.labelup, text = "LONG", location = location.belowbar, color = color.new(color.lime, 0), textcolor = color.black, size = size.small)
+plotshape(finalShort, title = "Final Short", style = shape.labeldown, text = "SHORT", location = location.abovebar, color = color.new(color.red, 0), textcolor = color.white, size = size.small)
+barcolor(finalLong ? color.lime : finalShort ? color.red : na)
+bgcolor(showBackground ? finalLong ? color.new(color.lime, 90) : finalShort ? color.new(color.red, 90) : na : na)
+
+// ---------------- Right-side integrated table
+if showPanel
+    f_header(0, "Trend Checklist", "Bull", "Bear", "指標")
+    f_check_row(1, "1", chartBull, chartBear, "Cloud")
+    f_check_row(2, "2", paBull, paBear, "HH/HL")
+    f_check_row(3, "3", greyBull, greyBear, "Grey Band")
+    f_check_row(4, "4", mtfBull, mtfBear, "MTF Cloud")
+    f_check_row(5, "5", tenetTrendBull, tenetTrendBear, "Trap/TENET")
+    f_cell(0, 6, "Score", f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(1, 6, str.tostring(bullTrendScore), f_dark_bg(), color.lime, text.align_center)
+    f_cell(2, 6, str.tostring(bearTrendScore), f_dark_bg(), color.red, text.align_center)
+    f_cell(3, 6, "滿分5", f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(0, 7, "結論", f_decision_bg(upTrend, downTrend), color.white, text.align_center)
+    f_cell(1, 7, trendText, f_decision_bg(upTrend, downTrend), color.white, text.align_center)
+    f_cell(2, 7, trendText, f_decision_bg(upTrend, downTrend), color.white, text.align_center)
+    f_cell(3, 7, trendText, f_decision_bg(upTrend, downTrend), color.white, text.align_center)
+    f_cell(0, 8, "", color.new(color.black, 100), color.white, text.align_center)
+    f_cell(1, 8, "", color.new(color.black, 100), color.white, text.align_center)
+    f_cell(2, 8, "", color.new(color.black, 100), color.white, text.align_center)
+    f_cell(3, 8, "", color.new(color.black, 100), color.white, text.align_center)
+    f_header(9, "Setup Checklist", "Long", "Short", "項目")
+    f_check_row(10, "1", upTrend, downTrend, "Trend")
+    f_check_row(11, "2", setupPullLong, setupPullShort, "Pullback/Kim")
+    f_check_row(12, "3", tenetLongOk, tenetShortOk, "TENET")
+    f_check_row(13, "4", vsopLong, vsopShort, "VSOP")
+    f_check_row(14, "5", rrLongOk, rrShortOk, "R:R")
+    f_cell(0, 15, "RR", f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(1, 15, str.tostring(rrLong, "#.##"), f_dark_bg(), rrLongOk ? color.lime : color.rgb(145, 150, 170), text.align_center)
+    f_cell(2, 15, str.tostring(rrShort, "#.##"), f_dark_bg(), rrShortOk ? color.lime : color.rgb(145, 150, 170), text.align_center)
+    f_cell(3, 15, "目標/風險", f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(0, 16, "Catalyst", f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(1, 16, str.tostring(setupLongScore), f_dark_bg(), color.lime, text.align_center)
+    f_cell(2, 16, str.tostring(setupShortScore), f_dark_bg(), color.red, text.align_center)
+    f_cell(3, 16, catalystText, f_dark_bg(), color.rgb(145, 150, 170), text.align_center)
+    f_cell(0, 17, "結論", f_decision_bg(finalLong, finalShort), color.white, text.align_center)
+    f_cell(1, 17, setupText, f_decision_bg(finalLong, finalShort), color.white, text.align_center)
+    f_cell(2, 17, setupText, f_decision_bg(finalLong, finalShort), color.white, text.align_center)
+    f_cell(3, 17, mainReason, f_decision_bg(finalLong, finalShort), color.white, text.align_center)
+
+// Fallback label: visible even if a chart layout hides table overlays.
+var label fallback = na
+fallbackText = "UGC Entry System\nTrend: " + trendText + "\nTrend Score B/Bear: " + str.tostring(bullTrendScore) + "/" + str.tostring(bearTrendScore) + "\nSetup: " + setupText + "\nSetup Score L/S: " + str.tostring(setupLongScore) + "/" + str.tostring(setupShortScore) + "\nReason: " + mainReason
+if showFallbackLabel and barstate.islast
+    if not na(fallback)
+        label.delete(fallback)
+    fallback := label.new(bar_index, high + atr * 2.0, fallbackText, style = label.style_label_left, textcolor = color.white, color = finalLong ? color.new(color.green, 15) : finalShort ? color.new(color.red, 15) : color.new(color.gray, 25), size = size.normal)
+
+alertcondition(finalLong, "UGC Integrated Long", "UGC Integrated Entry System: LONG setup is ready.")
+alertcondition(finalShort, "UGC Integrated Short", "UGC Integrated Entry System: SHORT setup is ready.")
+alertcondition(finalWait, "UGC Integrated Wait", "UGC Integrated Entry System: WAIT / no clean edge.")
