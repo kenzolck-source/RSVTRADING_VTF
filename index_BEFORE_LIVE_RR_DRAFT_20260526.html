@@ -571,58 +571,6 @@
             overflow-wrap: anywhere;
         }
 
-        .live-risk-box {
-            display: grid;
-            gap: 10px;
-            padding: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.2);
-            border-radius: 8px;
-            background: rgba(15, 23, 42, 0.6);
-        }
-
-        .live-risk-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            align-items: flex-start;
-        }
-
-        .live-risk-header strong {
-            color: #f8fafc;
-            font-size: 14px;
-        }
-
-        .live-risk-note {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.45;
-            text-align: right;
-        }
-
-        .live-risk-note.good { color: #bbf7d0; }
-        .live-risk-note.warn { color: #fed7aa; }
-        .live-risk-note.bad { color: #fecdd3; }
-
-        .live-risk-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 8px;
-        }
-
-        .live-risk-grid input {
-            padding: 9px 10px;
-        }
-
-        body.live-mode .live-panel {
-            border-color: rgba(74, 222, 128, 0.58);
-            box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.1), 0 18px 50px rgba(15, 23, 42, 0.42);
-        }
-
-        body.live-mode .live-risk-box {
-            border-color: rgba(74, 222, 128, 0.28);
-            background: rgba(20, 83, 45, 0.14);
-        }
-
         .live-decision.long,
         .live-status.good,
         .live-metric strong.good {
@@ -1156,10 +1104,6 @@
             box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
         }
 
-        input.good { border-color: rgba(74, 222, 128, 0.7); }
-        input.warn { border-color: rgba(250, 204, 21, 0.72); }
-        input.bad { border-color: rgba(251, 113, 133, 0.72); }
-
         input[readonly] {
             color: #bae6fd;
             background: rgba(8, 47, 73, 0.34);
@@ -1173,7 +1117,6 @@
 
         .field-help.good { color: #bbf7d0; }
         .field-help.warn { color: #fed7aa; }
-        .field-help.bad { color: #fecdd3; }
 
         textarea {
             resize: vertical;
@@ -1405,18 +1348,6 @@
                 position: static;
             }
 
-            .live-risk-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .live-risk-header {
-                display: grid;
-            }
-
-            .live-risk-note {
-                text-align: left;
-            }
-
             .filters {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -1509,8 +1440,7 @@
             .filters,
             .details-grid,
             .mini-form,
-            .live-metrics,
-            .live-risk-grid {
+            .live-metrics {
                 grid-template-columns: 1fr;
             }
 
@@ -1699,7 +1629,6 @@
                             <h2>盤中快判</h2>
                             <p class="live-subtitle">盤中只看四件事：方向、Setup 分數、R:R、狀態。詳細覆盤留到盤後。</p>
                         </div>
-                        <span class="badge" id="live-mode-pill">教學模式</span>
                         <button type="button" class="ghost-btn" id="live-mode-toggle" aria-pressed="false">快判模式 OFF</button>
                     </div>
                     <div class="live-body">
@@ -1719,26 +1648,6 @@
                             <div class="live-metric">
                                 <span>R:R</span>
                                 <strong id="live-rr">-</strong>
-                            </div>
-                        </div>
-                        <div class="live-risk-box">
-                            <div class="live-risk-header">
-                                <strong>Entry / SL / TP 快填</strong>
-                                <span id="live-rr-warning" class="live-risk-note">可選填，輸入後即時計 R:R。</span>
-                            </div>
-                            <div class="live-risk-grid">
-                                <div class="field">
-                                    <label for="live-entry">Entry</label>
-                                    <input id="live-entry" inputmode="decimal" placeholder="入場價">
-                                </div>
-                                <div class="field">
-                                    <label for="live-stop-loss">SL</label>
-                                    <input id="live-stop-loss" inputmode="decimal" placeholder="止損價">
-                                </div>
-                                <div class="field">
-                                    <label for="live-take-profit">TP</label>
-                                    <input id="live-take-profit" inputmode="decimal" placeholder="目標價">
-                                </div>
                             </div>
                         </div>
                         <div class="live-metric">
@@ -2099,7 +2008,7 @@
                             </div>
                             <div class="field">
                                 <label for="symbol">商品</label>
-                                <input id="symbol" placeholder="例如 NQ / QQQ / SPY" autocomplete="off">
+                                <input id="symbol" placeholder="例如 NQ / QQQ / SPY" autocomplete="off" required>
                             </div>
                             <div class="field">
                                 <label for="session">Session</label>
@@ -2395,15 +2304,10 @@
             indicatorSummary: document.getElementById("indicator-summary"),
             setupDetectorSummary: document.getElementById("setup-detector-summary"),
             liveModeToggle: document.getElementById("live-mode-toggle"),
-            liveModePill: document.getElementById("live-mode-pill"),
             liveDecision: document.getElementById("live-decision"),
             liveSetup: document.getElementById("live-setup"),
             liveScore: document.getElementById("live-score"),
             liveRr: document.getElementById("live-rr"),
-            liveRrWarning: document.getElementById("live-rr-warning"),
-            liveEntry: document.getElementById("live-entry"),
-            liveStopLoss: document.getElementById("live-stop-loss"),
-            liveTakeProfit: document.getElementById("live-take-profit"),
             liveStatus: document.getElementById("live-status"),
             liveReason: document.getElementById("live-reason"),
             todayPartButtons: document.querySelectorAll("[data-today-part]"),
@@ -2786,8 +2690,6 @@
             document.body.classList.toggle("live-mode", liveMode);
             els.liveModeToggle.textContent = liveMode ? "快判模式 ON" : "快判模式 OFF";
             els.liveModeToggle.setAttribute("aria-pressed", String(liveMode));
-            els.liveModePill.textContent = liveMode ? "盤中模式" : "教學模式";
-            els.liveModePill.className = `badge ${liveMode ? "green" : ""}`;
             localStorage.setItem(LIVE_MODE_KEY, liveMode ? "true" : "false");
             if (showMessage) showToast(liveMode ? "已切換到盤中快判模式。" : "已回到完整模式。");
             updateLivePanel();
@@ -2823,7 +2725,6 @@
             const decisionClass = decisionClassFromText(decisionText);
             const rr = formValue("rr");
             const rrNumber = currentRiskRewardValue();
-            const rrResult = computeRiskReward(formValue("entry"), formValue("stop-loss"), formValue("take-profit"));
             const dailyPlan = currentDailyPlan();
             const hasPlan = hasDailyPlanContent(dailyPlan);
             const minRr = hasPlan ? dailyPlan.minRr : 1.5;
@@ -2835,20 +2736,11 @@
             els.liveScore.textContent = best ? `${best.score}/100` : "-";
             els.liveScore.className = best ? scoreStatusClass(best.score) : "";
             els.liveRr.textContent = rr || "-";
-            els.liveRr.className = rrResult.className || "";
-            els.liveRrWarning.textContent = rrResult.rr ? rrResult.message : "可選填，輸入後即時計 R:R。";
-            els.liveRrWarning.className = `live-risk-note ${rrResult.className || ""}`;
 
             let status = "先完成 Step 1-3";
             let statusClass = "warn";
             if (appState.decisionText.includes("WAIT")) {
                 status = "WAIT";
-                statusClass = "warn";
-            } else if (Number.isFinite(rrNumber) && rrNumber < 1) {
-                status = "R:R 危險";
-                statusClass = "bad";
-            } else if (Number.isFinite(rrNumber) && rrNumber < 2) {
-                status = "R:R 偏低";
                 statusClass = "warn";
             } else if (appState.answers.respectsSystem === false || appState.trendId === "none" || appState.answers.blocked === true) {
                 status = "已被流程否決";
@@ -2884,8 +2776,7 @@
             els.liveStatus.className = `live-status ${statusClass}`;
             const planText = planCheck.summary ? ` 盤前計劃：${planCheck.summary}。` : "";
             els.liveReason.textContent = (appState.reasonText || setupDetectionSummaryText(detection) || "先填客觀觀察，再讓系統判斷。") + planText;
-            if (rrResult.className === "bad" || rrResult.className === "warn") els.liveReason.textContent += ` ${rrResult.message}`;
-            if (rrWarning && rrResult.className !== "bad" && rrResult.className !== "warn") els.liveReason.textContent += rrWarning;
+            if (rrWarning) els.liveReason.textContent += rrWarning;
         }
 
         function quickDetectSetup() {
@@ -3339,21 +3230,11 @@
 
         function normalizeRecord(raw) {
             if (!raw || typeof raw !== "object") return null;
+            const decisionText = String(raw.decisionText || "").trim();
+            if (!decisionText) return null;
+
             const outcome = outcomeLabels[raw.outcome] ? raw.outcome : "pending";
             const risk = raw.risk && typeof raw.risk === "object" ? raw.risk : {};
-            const rawDecisionText = String(raw.decisionText || "").trim();
-            const hasDraftContent = Boolean(
-                rawDecisionText
-                || String(raw.symbol || "").trim()
-                || String(raw.planNote || "").trim()
-                || String(raw.reviewNote || "").trim()
-                || String(risk.entry || "").trim()
-                || String(risk.stopLoss || "").trim()
-                || String(risk.takeProfit || "").trim()
-                || String(risk.rr || "").trim()
-            );
-            if (!hasDraftContent) return null;
-            const decisionText = rawDecisionText || "草稿 / 未完成";
             const answers = raw.answers && typeof raw.answers === "object" ? raw.answers : {};
             const chartContext = raw.chartContext && typeof raw.chartContext === "object" ? raw.chartContext : {};
             const indicatorSnapshot = raw.indicatorSnapshot && typeof raw.indicatorSnapshot === "object" ? raw.indicatorSnapshot : {};
@@ -3659,84 +3540,45 @@
             return Number(cleaned);
         }
 
-        function inferRiskSide(entry, stopLoss, takeProfit, decisionText = appState.decisionText) {
-            if (decisionText.includes("LONG")) return "long";
-            if (decisionText.includes("SHORT")) return "short";
+        function inferRiskSide(entry, stopLoss, takeProfit) {
+            if (appState.decisionText.includes("LONG")) return "long";
+            if (appState.decisionText.includes("SHORT")) return "short";
             if (takeProfit > entry && stopLoss < entry) return "long";
             if (takeProfit < entry && stopLoss > entry) return "short";
             return "";
         }
 
-        function computeRiskReward(entryValue, stopLossValue, takeProfitValue, decisionText = appState.decisionText) {
-            const entry = parsePrice(entryValue);
-            const stopLoss = parsePrice(stopLossValue);
-            const takeProfit = parsePrice(takeProfitValue);
-            if (![entry, stopLoss, takeProfit].every(Number.isFinite)) {
-                return { rr: "", rrNumber: NaN, className: "", message: "輸入 Entry、Stop Loss、Take Profit 後自動計算。", valid: false };
-            }
-
-            const side = inferRiskSide(entry, stopLoss, takeProfit, decisionText);
-            const risk = side === "long" ? entry - stopLoss : side === "short" ? stopLoss - entry : NaN;
-            const reward = side === "long" ? takeProfit - entry : side === "short" ? entry - takeProfit : NaN;
-
-            if (!side || risk <= 0 || reward <= 0) {
-                return { rr: "", rrNumber: NaN, className: "warn", message: "價格方向不一致：LONG 應 TP > Entry > SL；SHORT 應 SL > Entry > TP。", valid: false };
-            }
-
-            const rrNumber = reward / risk;
-            const className = rrNumber < 1 ? "bad" : rrNumber < 2 ? "warn" : "good";
-            const message = rrNumber < 1
-                ? `R:R ${rrNumber.toFixed(2)}，低於 1，風險回報不合格，建議 WAIT。`
-                : rrNumber < 2
-                    ? `R:R ${rrNumber.toFixed(2)}，介乎 1-2，只能小心處理或降低信心。`
-                    : `R:R ${rrNumber.toFixed(2)}，2 以上，風險回報合格。`;
-            return {
-                rr: rrNumber.toFixed(2),
-                rrNumber,
-                className,
-                message,
-                valid: true,
-                reward,
-                risk
-            };
-        }
-
-        function setInputValue(id, value) {
-            const field = document.getElementById(id);
-            if (field && field.value !== value) field.value = value;
-        }
-
-        function syncLiveRiskInputsFromForm() {
-            if (!els.liveEntry) return;
-            if (document.activeElement === els.liveEntry || document.activeElement === els.liveStopLoss || document.activeElement === els.liveTakeProfit) return;
-            els.liveEntry.value = formValue("entry");
-            els.liveStopLoss.value = formValue("stop-loss");
-            els.liveTakeProfit.value = formValue("take-profit");
-        }
-
-        function syncLiveRiskInputsToForm() {
-            setInputValue("entry", els.liveEntry.value.trim());
-            setInputValue("stop-loss", els.liveStopLoss.value.trim());
-            setInputValue("take-profit", els.liveTakeProfit.value.trim());
-            updateRiskReward();
-        }
-
-        function applyRiskRewardPresentation(result) {
+        function updateRiskReward() {
+            const entry = parsePrice(formValue("entry"));
+            const stopLoss = parsePrice(formValue("stop-loss"));
+            const takeProfit = parsePrice(formValue("take-profit"));
             const rrInput = document.getElementById("rr");
             const rrStatus = document.getElementById("rr-status");
 
             rrStatus.className = "field-help";
-            rrInput.value = result.rr;
-            rrStatus.textContent = result.valid && Number.isFinite(result.reward) && Number.isFinite(result.risk)
-                ? `${result.message} Reward ${result.reward.toFixed(2)} / Risk ${result.risk.toFixed(2)}。`
-                : result.message;
-            if (result.className) rrStatus.classList.add(result.className);
-        }
 
-        function updateRiskReward() {
-            syncLiveRiskInputsFromForm();
-            const result = computeRiskReward(formValue("entry"), formValue("stop-loss"), formValue("take-profit"));
-            applyRiskRewardPresentation(result);
+            if (![entry, stopLoss, takeProfit].every(Number.isFinite)) {
+                rrInput.value = "";
+                rrStatus.textContent = "輸入 Entry、Stop Loss、Take Profit 後自動計算。";
+                updateLivePanel();
+                return;
+            }
+
+            const side = inferRiskSide(entry, stopLoss, takeProfit);
+            const risk = side === "long" ? entry - stopLoss : side === "short" ? stopLoss - entry : NaN;
+            const reward = side === "long" ? takeProfit - entry : side === "short" ? entry - takeProfit : NaN;
+
+            if (!side || risk <= 0 || reward <= 0) {
+                rrInput.value = "";
+                rrStatus.textContent = "價格方向不一致：LONG 應 TP > Entry > SL；SHORT 應 SL > Entry > TP。";
+                rrStatus.classList.add("warn");
+                updateLivePanel();
+                return;
+            }
+
+            rrInput.value = (reward / risk).toFixed(2);
+            rrStatus.textContent = `自動計算：Reward ${reward.toFixed(2)} / Risk ${risk.toFixed(2)}。`;
+            rrStatus.classList.add("good");
             updateLivePanel();
         }
 
@@ -3745,11 +3587,6 @@
             els.form.reset();
             document.getElementById("trade-date").value = keepDate ? currentDate || todayString() : todayString();
             document.getElementById("confidence").value = "3";
-            if (els.liveEntry) {
-                els.liveEntry.value = "";
-                els.liveStopLoss.value = "";
-                els.liveTakeProfit.value = "";
-            }
             updateSubmittedAtPreview();
             updateConfidence();
             updateRiskReward();
@@ -3761,7 +3598,6 @@
             const currentTvSettings = readTvSettingsFromInputs();
             const tradeDate = formValue("trade-date") || todayString();
             const submittedAt = new Date().toISOString();
-            const hasDecision = Boolean(appState.decisionText);
             updateSubmittedAtPreview(new Date(submittedAt));
             return normalizeRecord({
                 id: makeId(),
@@ -3778,9 +3614,9 @@
                 setupName: appState.setupName,
                 setupDetection: appState.setupDetection,
                 dailyPlanSnapshot: dailyPlanSnapshotForRecord(tradeDate),
-                decisionText: hasDecision ? appState.decisionText : "草稿 / 未完成",
-                tradeType: appState.tradeType || "待補判斷",
-                reasonText: appState.reasonText || "先新增日誌草稿，之後再補完整判斷、價格或覆盤。",
+                decisionText: appState.decisionText,
+                tradeType: appState.tradeType,
+                reasonText: appState.reasonText,
                 answers: appState.answers,
                 risk: {
                     entry: formValue("entry"),
@@ -3803,30 +3639,15 @@
             });
         }
 
-        function hasSaveDraftContent() {
-            return Boolean(
-                appState.decisionText
-                || formValue("symbol")
-                || formValue("timeframe")
-                || formValue("entry")
-                || formValue("stop-loss")
-                || formValue("take-profit")
-                || formValue("plan-note")
-                || formValue("screenshot")
-                || formValue("tags")
-                || formValue("review-note")
-            );
-        }
-
         function handleSave(event) {
             event.preventDefault();
-            if (!hasSaveDraftContent()) {
-                showToast("至少填商品、價格、筆記，或完成一次判斷，才新增日誌。");
+            if (!appState.decisionText) {
+                showToast("先完成 4 步判斷，再儲存紀錄。");
                 return;
             }
             const record = buildRecordFromForm();
-            if (!record) {
-                showToast("這筆資料暫時太空，先補一點內容再儲存。");
+            if (!record || !record.symbol) {
+                showToast("請至少填寫商品名稱。");
                 return;
             }
             records.unshift(record);
@@ -3843,7 +3664,6 @@
         function directionKey(record) {
             if (record.decisionText.includes("LONG")) return "LONG";
             if (record.decisionText.includes("SHORT")) return "SHORT";
-            if (record.decisionText.includes("草稿")) return "DRAFT";
             return "WAIT";
         }
 
@@ -3943,7 +3763,7 @@
                             <div>
                                 <div class="record-title">
                                     <strong>${escapeHtml(record.symbol || "未命名商品")}</strong>
-                                    <span class="badge ${dir === "LONG" ? "green" : dir === "SHORT" ? "red" : dir === "DRAFT" ? "orange" : ""}">${escapeHtml(dir)}</span>
+                                    <span class="badge ${dir === "LONG" ? "green" : dir === "SHORT" ? "red" : ""}">${escapeHtml(dir)}</span>
                                     <span class="badge ${record.outcome === "win" ? "green" : record.outcome === "loss" ? "red" : record.outcome === "pending" ? "orange" : "yellow"}">${escapeHtml(outcomeLabels[record.outcome])}</span>
                                 </div>
                                 <div class="record-meta">${escapeHtml(record.tradeDate)} · ${escapeHtml(record.session || "-")} · ${escapeHtml(record.timeframe || "-")} · 信心 ${escapeHtml(String(record.confidence))}/5</div>
@@ -3978,36 +3798,12 @@
                     <div class="record-edit">
                         <div class="mini-form">
                             <div class="field">
-                                <label>商品</label>
-                                <input data-edit-field="symbol" value="${escapeHtml(record.symbol)}" placeholder="補商品">
-                            </div>
-                            <div class="field">
-                                <label>Entry</label>
-                                <input data-edit-field="entry" inputmode="decimal" value="${escapeHtml(record.risk.entry)}" placeholder="補入場價">
-                            </div>
-                            <div class="field">
-                                <label>SL</label>
-                                <input data-edit-field="stopLoss" inputmode="decimal" value="${escapeHtml(record.risk.stopLoss)}" placeholder="補止損">
-                            </div>
-                            <div class="field">
-                                <label>TP</label>
-                                <input data-edit-field="takeProfit" inputmode="decimal" value="${escapeHtml(record.risk.takeProfit)}" placeholder="補目標">
-                            </div>
-                            <div class="field">
-                                <label>R:R</label>
-                                <input data-edit-field="rr" value="${escapeHtml(record.risk.rr)}" readonly>
-                            </div>
-                            <div class="field">
                                 <label>結果狀態</label>
                                 <select data-edit-field="outcome">
                                     ${Object.entries(outcomeLabels).map(([value, label]) => `<option value="${value}" ${record.outcome === value ? "selected" : ""}>${escapeHtml(label)}</option>`).join("")}
                                 </select>
                             </div>
-                            <div class="field full">
-                                <label>計劃筆記</label>
-                                <textarea data-edit-field="planNote" placeholder="補交易計劃、入場原因、注意事項">${escapeHtml(record.planNote)}</textarea>
-                            </div>
-                            <div class="field full">
+                            <div class="field">
                                 <label>覆盤心得</label>
                                 <textarea data-edit-field="reviewNote" placeholder="補填紀律、錯誤、可重複的 edge">${escapeHtml(record.reviewNote)}</textarea>
                             </div>
@@ -4024,34 +3820,11 @@
             const id = card.dataset.recordId;
             const record = records.find(item => item.id === id);
             if (!record) return;
-            record.symbol = card.querySelector('[data-edit-field="symbol"]').value.trim();
-            record.risk.entry = card.querySelector('[data-edit-field="entry"]').value.trim();
-            record.risk.stopLoss = card.querySelector('[data-edit-field="stopLoss"]').value.trim();
-            record.risk.takeProfit = card.querySelector('[data-edit-field="takeProfit"]').value.trim();
-            const rrResult = computeRiskReward(record.risk.entry, record.risk.stopLoss, record.risk.takeProfit, record.decisionText);
-            record.risk.rr = rrResult.rr || card.querySelector('[data-edit-field="rr"]').value.trim();
-            record.planNote = card.querySelector('[data-edit-field="planNote"]').value.trim();
             record.outcome = card.querySelector('[data-edit-field="outcome"]').value;
             record.reviewNote = card.querySelector('[data-edit-field="reviewNote"]').value.trim();
             record.updatedAt = new Date().toISOString();
             saveRecords();
-            renderAll();
-            showToast("紀錄已更新，可以之後再補。");
-        }
-
-        function updateRecordCardRiskPreview(card) {
-            const id = card.dataset.recordId;
-            const record = records.find(item => item.id === id);
-            const result = computeRiskReward(
-                card.querySelector('[data-edit-field="entry"]')?.value || "",
-                card.querySelector('[data-edit-field="stopLoss"]')?.value || "",
-                card.querySelector('[data-edit-field="takeProfit"]')?.value || "",
-                record?.decisionText || ""
-            );
-            const rrField = card.querySelector('[data-edit-field="rr"]');
-            if (!rrField) return;
-            rrField.value = result.rr;
-            rrField.className = result.className || "";
+            showToast("覆盤已更新。");
         }
 
         function deleteRecord(card) {
@@ -4223,12 +3996,6 @@
             if (action === "copy") copyRecord(card);
         }
 
-        function handleRecordEditInput(event) {
-            if (!event.target.matches('[data-edit-field="entry"], [data-edit-field="stopLoss"], [data-edit-field="takeProfit"]')) return;
-            const card = event.target.closest(".record-card");
-            if (card) updateRecordCardRiskPreview(card);
-        }
-
         function bindEvents() {
             els.tabs.forEach(tab => tab.addEventListener("click", () => showView(tab.dataset.view)));
             els.todayPartButtons.forEach(button => {
@@ -4288,10 +4055,6 @@
             document.getElementById("live-detect-btn").addEventListener("click", quickDetectSetup);
             document.getElementById("live-risk-focus-btn").addEventListener("click", focusRiskFields);
             document.getElementById("live-quick-save-btn").addEventListener("click", quickSaveRecord);
-            [els.liveEntry, els.liveStopLoss, els.liveTakeProfit].forEach(input => {
-                input.addEventListener("input", syncLiveRiskInputsToForm);
-                input.addEventListener("change", syncLiveRiskInputsToForm);
-            });
             els.tvSymbol.addEventListener("keydown", event => {
                 if (event.key === "Enter") {
                     event.preventDefault();
@@ -4328,8 +4091,6 @@
             els.importFile.addEventListener("change", event => importJson(event.target.files[0]));
             els.journalList.addEventListener("click", handleRecordClick);
             els.reviewList.addEventListener("click", handleRecordClick);
-            els.journalList.addEventListener("input", handleRecordEditInput);
-            els.reviewList.addEventListener("input", handleRecordEditInput);
         }
 
         function init() {
