@@ -121,69 +121,6 @@
             background: var(--blue);
         }
 
-        .today-segment,
-        .workbench-segment {
-            display: flex;
-            gap: 8px;
-            padding: 6px;
-            margin-bottom: 14px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: rgba(15, 23, 42, 0.72);
-            box-shadow: var(--shadow);
-        }
-
-        .today-segment button,
-        .workbench-segment button {
-            flex: 1 1 0;
-            min-height: 42px;
-            border: 0;
-            border-radius: 6px;
-            padding: 10px 12px;
-            color: var(--muted);
-            background: transparent;
-            font-weight: 850;
-            white-space: nowrap;
-        }
-
-        .today-segment button.active,
-        .workbench-segment button.active {
-            color: #052e16;
-            background: var(--green);
-        }
-
-        #view-today.today-mode-plan .workbench-grid,
-        #view-today.today-mode-workbench .daily-plan-panel,
-        #view-today.today-mode-workbench .save-panel-card,
-        #view-today.today-mode-save .daily-plan-panel,
-        #view-today.today-mode-save .tv-panel,
-        #view-today.today-mode-save .live-panel,
-        #view-today.today-mode-save .workbench-segment,
-        #view-today.today-mode-save .flow-panel,
-        #view-today.today-mode-save .indicator-panel {
-            display: none;
-        }
-
-        #view-today.today-mode-save .workbench-grid,
-        #view-today.today-mode-save .decision-stack {
-            display: block;
-        }
-
-        #view-today.today-mode-save .save-panel-card {
-            display: block;
-            max-width: 1080px;
-            margin: 0 auto;
-        }
-
-        .workbench-tool-panel {
-            display: none;
-        }
-
-        .decision-stack.workbench-tool-flow .flow-panel,
-        .decision-stack.workbench-tool-indicator .indicator-panel {
-            display: block;
-        }
-
         .pwa-utility-bar {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -329,40 +266,12 @@
             overflow: hidden;
         }
 
-        .tv-settings {
-            border-bottom: 1px solid var(--line);
-        }
-
-        .tv-settings summary {
-            min-height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 12px 16px;
-            color: var(--text);
-            cursor: pointer;
-            font-weight: 850;
-            list-style: none;
-            background: rgba(15, 23, 42, 0.54);
-        }
-
-        .tv-settings summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .tv-settings summary::after {
-            content: "設定";
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
         .tv-controls {
             display: grid;
             grid-template-columns: 1.1fr 0.8fr 0.8fr;
             gap: 12px;
             padding: 16px;
+            border-bottom: 1px solid var(--line);
             background: rgba(15, 23, 42, 0.38);
         }
 
@@ -1002,49 +911,6 @@
             gap: 12px;
         }
 
-        #view-today.today-mode-save .form-grid {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
-
-        .review-extra {
-            grid-column: 1 / -1;
-            border: 1px solid rgba(148, 163, 184, 0.22);
-            border-radius: 8px;
-            background: rgba(15, 23, 42, 0.42);
-            overflow: hidden;
-        }
-
-        .review-extra summary {
-            min-height: 46px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 12px;
-            color: var(--text);
-            cursor: pointer;
-            font-weight: 850;
-            list-style: none;
-        }
-
-        .review-extra summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .review-extra summary::after {
-            content: "盤後補填";
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        .review-extra-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-            padding: 0 12px 12px;
-        }
-
         .field {
             display: grid;
             gap: 6px;
@@ -1333,17 +1199,6 @@
                 padding-bottom: calc(96px + env(safe-area-inset-bottom));
             }
 
-            .today-segment,
-            .workbench-segment {
-                overflow-x: auto;
-            }
-
-            .today-segment button,
-            .workbench-segment button {
-                flex: 1 0 auto;
-                min-width: 112px;
-            }
-
             .topbar {
                 gap: 12px;
                 margin-bottom: 12px;
@@ -1417,11 +1272,6 @@
                 grid-template-columns: 1fr;
             }
 
-            #view-today.today-mode-save .form-grid,
-            .review-extra-grid {
-                grid-template-columns: 1fr;
-            }
-
             .daily-plan-grid .wide {
                 grid-column: auto;
             }
@@ -1474,12 +1324,7 @@
             </div>
         </section>
 
-        <section id="view-today" class="view active today-mode-workbench">
-            <div class="today-segment" aria-label="今日判斷分段">
-                <button type="button" data-today-part="plan">盤前計劃</button>
-                <button type="button" class="active" data-today-part="workbench">盤中工作台</button>
-                <button type="button" data-today-part="save">儲存判斷</button>
-            </div>
+        <section id="view-today" class="view active">
             <section class="panel daily-plan-panel" id="daily-plan-panel">
                 <div class="panel-header">
                     <div>
@@ -1553,8 +1398,6 @@
                         <h2>TradingView 工作台</h2>
                         <span id="tv-status" class="step-pill">未載入</span>
                     </div>
-                    <details class="tv-settings">
-                        <summary>圖表設定</summary>
                     <div class="tv-controls">
                         <div class="field">
                             <label for="tv-symbol">Symbol</label>
@@ -1589,13 +1432,12 @@
                         </div>
                         <p class="tv-note">官方圖表只作即時參考；私人 Cloud / Trap 指標請用你的 TradingView layout 新分頁查看。</p>
                     </div>
-                    </details>
                     <div id="tv-chart-shell" class="tv-chart-shell">
                         <div id="tv-widget-root" class="tradingview-widget-container"></div>
                     </div>
                 </section>
 
-                <div class="decision-stack workbench-tool-flow">
+                <div class="decision-stack">
                 <section class="panel live-panel" id="live-panel">
                     <div class="panel-header">
                         <div>
@@ -1636,12 +1478,7 @@
                     </div>
                 </section>
 
-                <div class="workbench-segment" aria-label="盤中工具切換">
-                    <button type="button" class="active" data-workbench-tool="flow">判斷流程</button>
-                    <button type="button" data-workbench-tool="indicator">指標快填</button>
-                </div>
-
-                <section class="panel flow-panel workbench-tool-panel">
+                <section class="panel">
                     <div class="panel-header">
                         <h2>判斷流程</h2>
                         <span id="step-indicator" class="step-pill">Start</span>
@@ -1848,7 +1685,7 @@
                     </div>
                 </section>
 
-                <section class="panel indicator-panel workbench-tool-panel">
+                <section class="panel indicator-panel">
                     <div class="panel-header">
                         <h2>指標快填</h2>
                         <span class="step-pill">半自動</span>
@@ -1916,7 +1753,7 @@
                     </div>
                 </section>
 
-                <aside class="panel save-panel-card">
+                <aside class="panel">
                     <div class="panel-header">
                         <h2>儲存今日判斷</h2>
                         <span class="step-pill" id="save-state-pill">未有結果</span>
@@ -1973,9 +1810,6 @@
                                 <label for="plan-note">計劃筆記</label>
                                 <textarea id="plan-note" placeholder="寫低你點解入 / 點解等 / 觸發條件 / 失效條件"></textarea>
                             </div>
-                            <details class="review-extra">
-                                <summary>覆盤補充</summary>
-                                <div class="review-extra-grid">
                             <div class="field full slow-field">
                                 <label for="screenshot">截圖連結 / 備註</label>
                                 <input id="screenshot" placeholder="TradingView chart link、圖片路徑或簡短備註">
@@ -1998,8 +1832,6 @@
                                 <label for="review-note">覆盤心得</label>
                                 <textarea id="review-note" placeholder="之後補填：有無跟 SL？有無追價？setup 是否成立？"></textarea>
                             </div>
-                                </div>
-                            </details>
                         </div>
                         <div class="button-row" style="margin-top:14px;">
                             <button type="submit" class="primary-btn" id="save-btn">儲存紀錄</button>
@@ -2061,8 +1893,6 @@
         const TV_SETTINGS_KEY = "rsvTradingViewSettings.v1";
         const LIVE_MODE_KEY = "rsvLiveTradeMode.v1";
         const DAILY_PLAN_KEY = "rsvDailyPlan.v1";
-        const TODAY_PART_KEY = "rsvTodayPart.v1";
-        const WORKBENCH_TOOL_KEY = "rsvWorkbenchTool.v1";
         const TRADINGVIEW_WIDGET_SRC = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
 
         const defaultTvSettings = () => ({
@@ -2231,9 +2061,6 @@
             liveRr: document.getElementById("live-rr"),
             liveStatus: document.getElementById("live-status"),
             liveReason: document.getElementById("live-reason"),
-            todayPartButtons: document.querySelectorAll("[data-today-part]"),
-            workbenchToolButtons: document.querySelectorAll("[data-workbench-tool]"),
-            decisionStack: document.querySelector(".decision-stack"),
             installCard: document.getElementById("pwa-install-card"),
             networkPill: document.getElementById("pwa-network-pill"),
             modePill: document.getElementById("pwa-mode-pill"),
@@ -2282,39 +2109,6 @@
             els.toast.textContent = message;
             els.toast.classList.add("show");
             toastTimer = setTimeout(() => els.toast.classList.remove("show"), 2600);
-        }
-
-        function setTodayPart(part = "workbench", persist = true) {
-            const valid = ["plan", "workbench", "save"];
-            const next = valid.includes(part) ? part : "workbench";
-            const todayView = els.views.today;
-            valid.forEach(name => todayView.classList.toggle(`today-mode-${name}`, name === next));
-            els.todayPartButtons.forEach(button => {
-                button.classList.toggle("active", button.dataset.todayPart === next);
-            });
-            if (persist) localStorage.setItem(TODAY_PART_KEY, next);
-            if (next === "workbench") applyTvSettingsToInputs(tvSettings);
-        }
-
-        function setWorkbenchTool(tool = "flow", persist = true) {
-            const valid = ["flow", "indicator"];
-            const next = valid.includes(tool) ? tool : "flow";
-            valid.forEach(name => els.decisionStack.classList.toggle(`workbench-tool-${name}`, name === next));
-            els.workbenchToolButtons.forEach(button => {
-                button.classList.toggle("active", button.dataset.workbenchTool === next);
-            });
-            if (persist) localStorage.setItem(WORKBENCH_TOOL_KEY, next);
-            if (next === "indicator") renderSetupDetectorPreview();
-        }
-
-        function focusSaveField(fieldId = "symbol") {
-            setTodayPart("save");
-            requestAnimationFrame(() => {
-                const field = document.getElementById(fieldId);
-                if (!field) return;
-                field.scrollIntoView({ behavior: "smooth", block: "center" });
-                field.focus();
-            });
         }
 
         function isStandaloneMode() {
@@ -2709,23 +2503,21 @@
                 return;
             }
             answerDetectedSetup();
-            setWorkbenchTool("flow");
             updateLivePanel();
         }
 
         function focusRiskFields() {
-            focusSaveField("entry");
+            const entry = document.getElementById("entry");
+            entry.scrollIntoView({ behavior: "smooth", block: "center" });
+            entry.focus();
         }
 
         function quickSaveRecord() {
-            setTodayPart("save");
-            requestAnimationFrame(() => {
-                if (typeof els.form.requestSubmit === "function") {
-                    els.form.requestSubmit();
-                    return;
-                }
-                document.getElementById("save-btn").click();
-            });
+            if (typeof els.form.requestSubmit === "function") {
+                els.form.requestSubmit();
+                return;
+            }
+            document.getElementById("save-btn").click();
         }
 
         function normalizeTvUrl(value) {
@@ -3253,7 +3045,6 @@
         function startApp() {
             appState = defaultState();
             updateSaveState();
-            setWorkbenchTool("flow");
             showScreen("q1", "Step 1/4");
         }
 
@@ -3897,12 +3688,6 @@
 
         function bindEvents() {
             els.tabs.forEach(tab => tab.addEventListener("click", () => showView(tab.dataset.view)));
-            els.todayPartButtons.forEach(button => {
-                button.addEventListener("click", () => setTodayPart(button.dataset.todayPart));
-            });
-            els.workbenchToolButtons.forEach(button => {
-                button.addEventListener("click", () => setWorkbenchTool(button.dataset.workbenchTool));
-            });
             document.getElementById("dismiss-install-btn").addEventListener("click", dismissInstallPrompt);
             window.addEventListener("online", () => {
                 updateNetworkUi();
@@ -3933,7 +3718,8 @@
             document.getElementById("start-btn").addEventListener("click", startApp);
             document.getElementById("reset-btn").addEventListener("click", resetApp);
             document.getElementById("save-focus-btn").addEventListener("click", () => {
-                focusSaveField("symbol");
+                document.getElementById("symbol").focus();
+                document.getElementById("symbol").scrollIntoView({ behavior: "smooth", block: "center" });
             });
             document.querySelectorAll("[data-action]").forEach(button => {
                 button.addEventListener("click", () => {
@@ -4006,8 +3792,6 @@
             loadLiveMode();
             loadRecords();
             bindEvents();
-            setTodayPart(localStorage.getItem(TODAY_PART_KEY) || "workbench", false);
-            setWorkbenchTool(localStorage.getItem(WORKBENCH_TOOL_KEY) || "flow", false);
             renderTradingView(false);
             renderAll();
             showView(viewFromHash(), false);
