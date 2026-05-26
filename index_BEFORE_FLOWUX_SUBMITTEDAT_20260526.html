@@ -1910,7 +1910,6 @@
 
                         <div id="indicator-summary" class="indicator-summary"></div>
                         <div class="button-row">
-                            <button type="button" class="primary-btn" id="submit-indicator-setup-btn">完成快填，判斷 Setup</button>
                             <button type="button" class="secondary-btn" id="write-indicator-note-btn">寫入計劃筆記</button>
                             <button type="button" class="ghost-btn" id="clear-indicator-btn">清空快填</button>
                         </div>
@@ -1927,11 +1926,6 @@
                             <div class="field">
                                 <label for="trade-date">日期</label>
                                 <input type="date" id="trade-date" required>
-                            </div>
-                            <div class="field">
-                                <label for="submitted-at">提交時間</label>
-                                <input id="submitted-at" placeholder="儲存時自動記錄" readonly>
-                                <span class="field-help">按儲存時會更新到當刻本地時間。</span>
                             </div>
                             <div class="field">
                                 <label for="symbol">商品</label>
@@ -2276,11 +2270,6 @@
             return local.toISOString().slice(0, 10);
         }
 
-        function updateSubmittedAtPreview(date = new Date()) {
-            const field = document.getElementById("submitted-at");
-            if (field) field.value = formatDateTime(date);
-        }
-
         function makeId() {
             if (window.crypto && typeof window.crypto.randomUUID === "function") {
                 return window.crypto.randomUUID();
@@ -2305,7 +2294,6 @@
             });
             if (persist) localStorage.setItem(TODAY_PART_KEY, next);
             if (next === "workbench") applyTvSettingsToInputs(tvSettings);
-            if (next === "save") updateSubmittedAtPreview();
         }
 
         function setWorkbenchTool(tool = "flow", persist = true) {
@@ -2720,12 +2708,6 @@
                 updateLivePanel();
                 return;
             }
-            answerDetectedSetup();
-            setWorkbenchTool("flow");
-            updateLivePanel();
-        }
-
-        function submitIndicatorSetup() {
             answerDetectedSetup();
             setWorkbenchTool("flow");
             updateLivePanel();
@@ -3169,13 +3151,11 @@
             const dailyPlanSnapshot = raw.dailyPlanSnapshot && typeof raw.dailyPlanSnapshot === "object"
                 ? normalizeDailyPlan(raw.dailyPlanSnapshot, raw.tradeDate || todayString())
                 : null;
-            const submittedAt = String(raw.submittedAt || raw.createdAt || new Date().toISOString());
 
             return {
                 id: String(raw.id || makeId()),
-                createdAt: String(raw.createdAt || submittedAt),
-                submittedAt,
-                updatedAt: String(raw.updatedAt || raw.createdAt || submittedAt),
+                createdAt: String(raw.createdAt || new Date().toISOString()),
+                updatedAt: String(raw.updatedAt || raw.createdAt || new Date().toISOString()),
                 tradeDate: String(raw.tradeDate || todayString()),
                 symbol: String(raw.symbol || "").trim(),
                 session: String(raw.session || ""),
@@ -3268,7 +3248,6 @@
             els.screens[screenName].classList.add("active");
             els.stepIndicator.textContent = stepText;
             updateLivePanel();
-            if (screenName === "q4") setWorkbenchTool("indicator");
         }
 
         function startApp() {
@@ -3514,7 +3493,6 @@
             els.form.reset();
             document.getElementById("trade-date").value = keepDate ? currentDate || todayString() : todayString();
             document.getElementById("confidence").value = "3";
-            updateSubmittedAtPreview();
             updateConfidence();
             updateRiskReward();
         }
@@ -3524,13 +3502,10 @@
             syncIndicatorNote();
             const currentTvSettings = readTvSettingsFromInputs();
             const tradeDate = formValue("trade-date") || todayString();
-            const submittedAt = new Date().toISOString();
-            updateSubmittedAtPreview(new Date(submittedAt));
             return normalizeRecord({
                 id: makeId(),
-                createdAt: submittedAt,
-                submittedAt,
-                updatedAt: submittedAt,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 tradeDate,
                 symbol: formValue("symbol"),
                 session: formValue("session"),
@@ -3708,7 +3683,6 @@
                             <div class="detail"><span>Entry</span><b>${escapeHtml(record.risk.entry || "-")}</b></div>
                             <div class="detail"><span>SL</span><b>${escapeHtml(record.risk.stopLoss || "-")}</b></div>
                             <div class="detail"><span>TP</span><b>${escapeHtml(record.risk.takeProfit || "-")}</b></div>
-                            <div class="detail"><span>提交時間</span><b>${escapeHtml(formatDateTime(record.submittedAt || record.createdAt))}</b></div>
                             <div class="detail"><span>建立時間</span><b>${escapeHtml(formatDateTime(record.createdAt))}</b></div>
                             <div class="detail"><span>TV Symbol</span><b>${escapeHtml(tvSymbol || "-")}</b></div>
                             <div class="detail"><span>TV TF</span><b>${escapeHtml(tvInterval || "-")}</b></div>
@@ -3771,7 +3745,6 @@
             if (!record) return;
             const text = [
                 `${record.tradeDate} ${record.symbol}`,
-                `提交時間：${formatDateTime(record.submittedAt || record.createdAt)}`,
                 `方向：${directionKey(record)} / ${record.tradeType}`,
                 `趨勢：${record.trendName}`,
                 `Setup：${record.setupName}`,
@@ -3806,7 +3779,7 @@
                 "tradeDate", "symbol", "session", "timeframe", "decision", "tradeType",
                 "trend", "setup", "setupDetection", "reason", "entry", "stopLoss", "takeProfit", "rr",
                 "dailyBias", "plannedSetups", "minRr", "planMatch",
-                "tvSymbol", "tvInterval", "tvLayoutUrl", "indicatorSummary", "confidence", "outcome", "planNote", "reviewNote", "tags", "submittedAt", "createdAt"
+                "tvSymbol", "tvInterval", "tvLayoutUrl", "indicatorSummary", "confidence", "outcome", "planNote", "reviewNote", "tags", "createdAt"
             ];
             const rows = records.map(record => [
                 record.tradeDate,
@@ -3836,7 +3809,6 @@
                 record.planNote,
                 record.reviewNote,
                 record.tags.join("|"),
-                record.submittedAt || record.createdAt,
                 record.createdAt
             ]);
             const csv = [headers, ...rows].map(row => row.map(csvEscape).join(",")).join("\n");
@@ -3996,7 +3968,6 @@
                 button.addEventListener("click", () => toggleVsopStep(button.dataset.vsopStep));
             });
             els.indicatorNote.addEventListener("input", syncIndicatorNote);
-            document.getElementById("submit-indicator-setup-btn").addEventListener("click", submitIndicatorSetup);
             document.getElementById("write-indicator-note-btn").addEventListener("click", writeIndicatorToPlanNote);
             document.getElementById("clear-indicator-btn").addEventListener("click", () => clearIndicatorState(true));
             ["entry", "stop-loss", "take-profit"].forEach(id => {
@@ -4026,7 +3997,6 @@
             updateNetworkUi();
             registerServiceWorker();
             document.getElementById("trade-date").value = todayString();
-            updateSubmittedAtPreview();
             els.dailyPlanDate.value = todayString();
             loadTvSettings();
             loadDailyPlans();
