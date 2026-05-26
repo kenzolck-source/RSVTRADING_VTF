@@ -1,4 +1,4 @@
-const CACHE_NAME = "rsv-iphone-pwa-v1-20260526-beginner-guides";
+const CACHE_NAME = "rsv-iphone-pwa-v1-20260526-flowux-submittedat";
 const APP_SHELL = [
   "./",
   "./index.html",

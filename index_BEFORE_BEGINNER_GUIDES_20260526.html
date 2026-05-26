@@ -606,6 +606,9 @@
             flex: 1 1 130px;
         }
 
+        body.live-mode .answer-guide,
+        body.live-mode .screen > p,
+        body.live-mode .setup-detector p,
         body.live-mode .tv-note,
         body.live-mode .tv-controls .field.full,
         body.live-mode .slow-field {
@@ -879,36 +882,6 @@
             background: rgba(15, 23, 42, 0.68);
             font-size: 13px;
             line-height: 1.55;
-        }
-
-        .beginner-note {
-            margin: 12px 0 16px;
-            padding: 12px;
-            border: 1px solid rgba(56, 189, 248, 0.28);
-            border-radius: 8px;
-            background: rgba(8, 47, 73, 0.2);
-            color: #dbeafe;
-        }
-
-        .beginner-note h4 {
-            margin-bottom: 8px;
-            font-size: 13px;
-            letter-spacing: 0;
-            text-transform: uppercase;
-            color: var(--blue);
-        }
-
-        .beginner-note ul {
-            display: grid;
-            gap: 6px;
-            margin-left: 18px;
-            color: var(--text);
-            font-size: 13px;
-            line-height: 1.55;
-        }
-
-        .beginner-note b {
-            color: #f8fafc;
         }
 
         .primary-btn,
@@ -1685,15 +1658,6 @@
                             <span class="step-label">Step 1</span>
                             <h3>蠟燭有「尊重」系統嗎？</h3>
                             <p>是否規律貼著 EMA 或在雲層邊緣反彈？</p>
-                            <div class="beginner-note">
-                                <h4>新手看盤提示</h4>
-                                <ul>
-                                    <li><b>先縮小圖表。</b>不要只看最後一支 K，先看最近 15-30 分鐘是否有一致反應。</li>
-                                    <li><b>YES 的證據：</b>同一條 EMA、Cloud 邊、前高低被市場反覆尊重，價格到位後有明確反應。</li>
-                                    <li><b>NO 的證據：</b>上下亂插、雲內雲外來回穿、每一支 K 都打破上一個判斷。</li>
-                                    <li><b>小白規則：</b>如果你要用很多說話說服自己「其實都有少少尊重」，就當 NO。</li>
-                                </ul>
-                            </div>
                             <div class="answer-list">
                                 <button class="answer-btn good" data-action="q1" data-value="true">
                                     <span class="answer-icon">✓</span>
@@ -1718,15 +1682,6 @@
                             <span class="step-label">Step 2</span>
                             <h3>大方向是誰在控盤？</h3>
                             <p>先決定大局。大腦要猜，就代表暫時看不懂。</p>
-                            <div class="beginner-note">
-                                <h4>新手看盤提示</h4>
-                                <ul>
-                                    <li><b>Uptrend：</b>高點有推高，回調低點守得住，價格大多在 Cloud 上方或被買回。</li>
-                                    <li><b>Downtrend：</b>低點有跌穿，反彈高點過不到，價格大多在 Cloud 下方或被賣回。</li>
-                                    <li><b>Range：</b>上下邊界都明顯，中間沒有方向優勢，只能等低位做多或高位做空。</li>
-                                    <li><b>看不懂：</b>牛熊理由同時成立，或者你 10 秒內講不出主導方，就先 WAIT。</li>
-                                </ul>
-                            </div>
                             <div class="answer-list">
                                 <button class="answer-btn good" data-action="q2" data-id="uptrend" data-name="明確 Uptrend">
                                     <span class="answer-icon">↑</span>
@@ -1767,15 +1722,6 @@
                             <span class="step-label">Step 3</span>
                             <h3>大 Time Frame 有阻礙嗎？</h3>
                             <p>小級別 setup 不應硬撞 1H / 4H 強雲層或關鍵位。</p>
-                            <div class="beginner-note">
-                                <h4>新手看盤提示</h4>
-                                <ul>
-                                    <li><b>先看目標方向。</b>如果做多，就看上方最近有沒有 1H/4H Cloud、前高、供應區；做空就看下方。</li>
-                                    <li><b>暢通：</b>Entry 到第一個明顯阻力/支撐之間有空間，R:R 有機會達標。</li>
-                                    <li><b>擋路：</b>一入場很快撞大級別位，即使方向看對，也可能只賺少少但要承受完整止損。</li>
-                                    <li><b>小白規則：</b>如果 target 比 stop loss 還近，這不是好交易，是追緊張感。</li>
-                                </ul>
-                            </div>
                             <div class="answer-list">
                                 <button class="answer-btn good" data-action="q3" data-blocked="false">
                                     <span class="answer-icon">✓</span>
@@ -1801,16 +1747,6 @@
                             <div class="setup-detector">
                                 <h4>客觀 Setup 偵測</h4>
                                 <p class="muted">先在「指標快填」輸入你看到的事實：Cloud 狀態、Cloud-to-Cloud 路徑、Trap、VSOP 四步、Kim / R-Kim。然後由系統判斷最適合的 setup；證據不夠就 WAIT。</p>
-                                <div class="beginner-note">
-                                    <h4>新手看盤提示</h4>
-                                    <ul>
-                                        <li><b>不要先決定 Setup 名稱。</b>先填你看見的證據，再讓系統告訴你最像哪一種。</li>
-                                        <li><b>FIRST TRAP：</b>重點是先掃 liquidity 或假突破，再 reclaim 關鍵位。</li>
-                                        <li><b>VSOP：</b>四步要齊：Imbalance、FVG、Sweep Liquidity、Back to FVG。</li>
-                                        <li><b>CLOUD TO CLOUD：</b>中間路徑要乾淨，下一層 Cloud 才是合理 target。</li>
-                                        <li><b>KIM / R-KIM：</b>先有明顯 impulse，再弱反彈或小回調，最後突破 trigger。</li>
-                                    </ul>
-                                </div>
                                 <div id="setup-detector-summary" class="setup-detector-summary"></div>
                                 <div class="button-row">
                                     <button type="button" class="primary-btn" data-action="detect-setup">根據觀察判斷 Setup</button>
@@ -1866,15 +1802,6 @@
                             <span class="step-label">Range Edge</span>
                             <h3>Setup 發生在 Range 的哪個位置？</h3>
                             <p>Range 可以交易，但只接受邊界。中間位即使有 setup 名稱，也容易變成追價。</p>
-                            <div class="beginner-note">
-                                <h4>新手看盤提示</h4>
-                                <ul>
-                                    <li><b>低多：</b>價格在 Range 底部附近，有 setup 支持反彈，SL 可以放在地板外。</li>
-                                    <li><b>高空：</b>價格在 Range 頂部附近，有 setup 支持回落，SL 可以放在天花板外。</li>
-                                    <li><b>不做：</b>價格在中間、上下空間差不多、或者你不能清楚說出邊界在哪。</li>
-                                    <li><b>小白規則：</b>Range 中間最容易令人覺得「好似有位」，但通常最沒有 edge。</li>
-                                </ul>
-                            </div>
                             <div class="answer-list">
                                 <button class="answer-btn good" data-action="range-side" data-side="long">
                                     <span class="answer-icon">↑</span>
