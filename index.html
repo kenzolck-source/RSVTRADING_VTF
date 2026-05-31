@@ -754,6 +754,336 @@
             background: rgba(120, 53, 15, 0.18);
         }
 
+        .execution-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 0.92fr) minmax(360px, 1.08fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .execution-stack {
+            display: grid;
+            gap: 14px;
+        }
+
+        .execution-card {
+            padding: 14px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.55);
+        }
+
+        .execution-card h3 {
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .execution-status-light {
+            display: grid;
+            gap: 8px;
+            padding: 16px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.68);
+        }
+
+        .execution-status-light.good {
+            border-color: rgba(74, 222, 128, 0.45);
+            background: rgba(20, 83, 45, 0.18);
+        }
+
+        .execution-status-light.warn {
+            border-color: rgba(250, 204, 21, 0.46);
+            background: rgba(113, 63, 18, 0.18);
+        }
+
+        .execution-status-light.bad {
+            border-color: rgba(251, 113, 133, 0.5);
+            background: rgba(127, 29, 29, 0.2);
+        }
+
+        .execution-status-light.orange {
+            border-color: rgba(251, 146, 60, 0.52);
+            background: rgba(124, 45, 18, 0.2);
+        }
+
+        .execution-status-light strong {
+            font-size: 22px;
+            color: #f8fafc;
+        }
+
+        .execution-status-light span {
+            color: #dbeafe;
+            line-height: 1.55;
+            font-size: 13px;
+        }
+
+        .execution-warnings {
+            display: grid;
+            gap: 8px;
+        }
+
+        .execution-warning {
+            padding: 10px 12px;
+            border: 1px solid rgba(250, 204, 21, 0.38);
+            border-radius: 7px;
+            color: #fef3c7;
+            background: rgba(113, 63, 18, 0.16);
+            font-size: 13px;
+            line-height: 1.5;
+            font-weight: 800;
+        }
+
+        .execution-warning.bad {
+            border-color: rgba(251, 113, 133, 0.44);
+            color: #ffe4e6;
+            background: rgba(127, 29, 29, 0.18);
+        }
+
+        .execution-warning.good {
+            border-color: rgba(74, 222, 128, 0.36);
+            color: #dcfce7;
+            background: rgba(20, 83, 45, 0.16);
+        }
+
+        .execution-ticket {
+            padding: 18px;
+        }
+
+        .execution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .execution-grid .full {
+            grid-column: 1 / -1;
+        }
+
+        .execution-actions {
+            margin-top: 14px;
+        }
+
+        .setup-guide-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .setup-guide-nav {
+            position: sticky;
+            top: 18px;
+        }
+
+        .setup-guide-nav-list {
+            display: grid;
+            gap: 8px;
+            padding: 0 16px 16px;
+        }
+
+        .setup-jump {
+            width: 100%;
+            text-align: left;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(15, 23, 42, 0.58);
+            color: #e2e8f0;
+            border-radius: 7px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .setup-jump strong {
+            display: block;
+            color: #f8fafc;
+            font-size: 14px;
+        }
+
+        .setup-jump span {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .setup-guide-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .setup-card {
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(15, 23, 42, 0.76);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .setup-card-header {
+            padding: 18px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+            display: grid;
+            gap: 8px;
+        }
+
+        .setup-kicker {
+            color: var(--blue);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0;
+        }
+
+        .setup-card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .setup-card-title h2 {
+            margin: 0;
+        }
+
+        .setup-one-line {
+            color: #dbeafe;
+            line-height: 1.55;
+            font-size: 14px;
+        }
+
+        .setup-card-body {
+            padding: 18px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .setup-map {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .setup-section {
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            background: rgba(2, 6, 23, 0.36);
+            border-radius: 7px;
+            padding: 14px;
+            min-width: 0;
+        }
+
+        .setup-map .full {
+            grid-column: 1 / -1;
+        }
+
+        .setup-section h3 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: 14px;
+        }
+
+        .setup-section p,
+        .setup-section li {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .setup-section p {
+            margin: 0;
+        }
+
+        .setup-list {
+            margin: 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 6px;
+        }
+
+        .setup-flow {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .setup-flow-step {
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            background: rgba(8, 47, 73, 0.24);
+            border-radius: 7px;
+            padding: 10px;
+            color: #dbeafe;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .setup-question-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .setup-question {
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            background: rgba(20, 83, 45, 0.14);
+            border-radius: 7px;
+            padding: 10px;
+            color: #d9f99d;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .setup-diagram {
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            border-radius: 8px;
+            background: #07111f;
+            overflow: hidden;
+        }
+
+        .setup-diagram svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            min-height: 220px;
+        }
+
+        .setup-guide-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .setup-guide-actions button {
+            flex: 1 1 180px;
+        }
+
+        body.live-mode #view-execution .panel-header .live-subtitle {
+            display: none;
+        }
+
+        body.live-mode #view-execution .execution-status-light {
+            border-width: 2px;
+            padding: 18px;
+            min-height: 120px;
+        }
+
+        body.live-mode #view-execution .execution-status-light strong {
+            font-size: 28px;
+        }
+
+        body.live-mode #view-execution #execution-rr {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        body.live-mode #view-execution .execution-warning {
+            border-width: 2px;
+            font-size: 14px;
+        }
+
+        body.live-mode #view-execution #execution-save-draft-btn {
+            flex: 2 1 180px;
+        }
+
         .tv-chart-shell {
             height: 620px;
             min-height: 360px;
@@ -1389,6 +1719,27 @@
                 grid-template-columns: 1fr;
             }
 
+            .execution-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .setup-guide-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .setup-guide-nav {
+                position: static;
+            }
+
+            .setup-guide-nav-list {
+                display: flex;
+                overflow-x: auto;
+            }
+
+            .setup-jump {
+                flex: 0 0 220px;
+            }
+
             .daily-plan-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
@@ -1510,7 +1861,11 @@
             .details-grid,
             .mini-form,
             .live-metrics,
-            .live-risk-grid {
+            .live-risk-grid,
+            .execution-grid,
+            .setup-map,
+            .setup-flow,
+            .setup-question-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1552,6 +1907,8 @@
             </div>
             <nav class="tabs" aria-label="主功能">
                 <button class="tab-btn active" data-view="today">今日判斷</button>
+                <button class="tab-btn" data-view="execution">執行</button>
+                <button class="tab-btn" data-view="tutorial">教學</button>
                 <button class="tab-btn" data-view="journal">日誌</button>
                 <button class="tab-btn" data-view="review">覆盤</button>
             </nav>
@@ -2067,6 +2424,21 @@
                             </div>
                         </div>
 
+                        <div class="indicator-section">
+                            <h3>Kim 深度確認</h3>
+                            <div class="chip-grid">
+                                <button type="button" class="indicator-chip" data-kim-deep-step="impulse">有 waterfall / impulse</button>
+                                <button type="button" class="indicator-chip good" data-kim-deep-step="weakPullback">反彈弱 / 小回調</button>
+                                <button type="button" class="indicator-chip bad" data-kim-deep-step="strongBounce">反彈太強</button>
+                                <button type="button" class="indicator-chip good" data-kim-deep-step="triggerBroken">已破 trigger</button>
+                                <button type="button" class="indicator-chip warn" data-kim-deep-step="triggerPending">未破 trigger</button>
+                                <button type="button" class="indicator-chip good" data-kim-deep-step="aligned">方向順大勢</button>
+                                <button type="button" class="indicator-chip bad" data-kim-deep-step="counterTrend">方向逆大勢</button>
+                                <button type="button" class="indicator-chip good" data-kim-deep-step="slValid">SL 在失效位外</button>
+                                <button type="button" class="indicator-chip warn" data-kim-deep-step="slInvalid">SL 不合理 / 未確認</button>
+                            </div>
+                        </div>
+
                         <div class="field">
                             <label for="indicator-note">指標備註</label>
                             <textarea id="indicator-note" placeholder="例如：Trap level 在 premarket high；VSOP 差 back to FVG 確認"></textarea>
@@ -2181,6 +2553,142 @@
             </div>
         </section>
 
+        <section id="view-execution" class="view">
+            <div class="execution-layout">
+                <div class="execution-stack">
+                    <section class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2>盤中執行器</h2>
+                                <p class="live-subtitle">入場前最後檢查：只看計劃、方向、Setup、R:R 和是否偏離規則。</p>
+                            </div>
+                            <div class="button-row">
+                                <span id="execution-status-pill" class="badge orange">等待資料</span>
+                                <button type="button" class="ghost-btn" id="execution-live-mode-toggle" aria-pressed="false">快判模式 OFF</button>
+                            </div>
+                        </div>
+                        <div class="execution-ticket">
+                            <div id="execution-status-light" class="execution-status-light warn">
+                                <strong id="execution-status-title">小心</strong>
+                                <span id="execution-status-desc">先同步今日快判，或者直接填交易票據。</span>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h2>今日計劃摘要</h2>
+                            <span class="step-pill">Plan</span>
+                        </div>
+                        <div class="execution-ticket">
+                            <div id="execution-plan-summary" class="daily-plan-summary warn">今日未填盤前計劃。</div>
+                        </div>
+                    </section>
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h2>強提醒</h2>
+                            <span class="step-pill">Risk</span>
+                        </div>
+                        <div class="execution-ticket">
+                            <div id="execution-warnings" class="execution-warnings"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>當前交易票據</h2>
+                            <p class="live-subtitle">可先存草稿，之後在日誌補資料。提醒不會硬性封鎖。</p>
+                        </div>
+                        <span id="execution-draft-status" class="step-pill">未暫存</span>
+                    </div>
+                    <form id="execution-form" class="execution-ticket">
+                        <div class="execution-grid">
+                            <div class="field">
+                                <label for="execution-date">日期</label>
+                                <input type="date" id="execution-date">
+                            </div>
+                            <div class="field">
+                                <label for="execution-symbol">商品</label>
+                                <input id="execution-symbol" placeholder="例如 NQ / QQQ / SPY" autocomplete="off">
+                            </div>
+                            <div class="field">
+                                <label for="execution-direction">方向</label>
+                                <select id="execution-direction">
+                                    <option value="">草稿 / 未完成</option>
+                                    <option value="long">LONG</option>
+                                    <option value="short">SHORT</option>
+                                    <option value="wait">WAIT</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="execution-setup">Setup</label>
+                                <select id="execution-setup">
+                                    <option value="">未確認</option>
+                                    <option value="first_trap">FIRST TRAP</option>
+                                    <option value="vsop">VSOP</option>
+                                    <option value="cloud_to_cloud">CLOUD TO CLOUD</option>
+                                    <option value="kim_setup">KIM / R-KIM</option>
+                                    <option value="none">沒有清晰 Setup</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="execution-entry">Entry</label>
+                                <input id="execution-entry" inputmode="decimal" placeholder="入場價">
+                            </div>
+                            <div class="field">
+                                <label for="execution-stop-loss">SL</label>
+                                <input id="execution-stop-loss" inputmode="decimal" placeholder="止損價">
+                            </div>
+                            <div class="field">
+                                <label for="execution-take-profit">TP</label>
+                                <input id="execution-take-profit" inputmode="decimal" placeholder="目標價">
+                            </div>
+                            <div class="field">
+                                <label for="execution-rr">R:R</label>
+                                <input id="execution-rr" readonly placeholder="自動計算">
+                                <span id="execution-rr-status" class="field-help">輸入 Entry / SL / TP 後自動計算。</span>
+                            </div>
+                            <div class="field full">
+                                <label for="execution-confidence">信心分</label>
+                                <div class="confidence-row">
+                                    <input type="range" id="execution-confidence" min="1" max="5" value="3">
+                                    <span id="execution-confidence-value" class="confidence-value">3</span>
+                                </div>
+                            </div>
+                            <div class="field full">
+                                <label for="execution-note">執行備註</label>
+                                <textarea id="execution-note" placeholder="例如：等 pullback 到 FVG，不追價；若 R:R 低於 2 只記錄不做。"></textarea>
+                            </div>
+                        </div>
+                        <div class="button-row execution-actions">
+                            <button type="submit" class="primary-btn" id="execution-save-draft-btn">存為草稿</button>
+                            <button type="button" class="secondary-btn" id="execution-sync-btn">同步今日快判</button>
+                            <button type="button" class="secondary-btn" id="execution-jump-save-btn">跳到補資料</button>
+                            <button type="button" class="ghost-btn" id="execution-clear-btn">清空執行票據</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </section>
+
+        <section id="view-tutorial" class="view">
+            <div class="setup-guide-layout">
+                <aside class="panel setup-guide-nav">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Setup 教學</h2>
+                            <p class="live-subtitle">四個核心入場劇本。先看事實，再決定是否值得出手。</p>
+                        </div>
+                        <span class="step-pill">Beginner</span>
+                    </div>
+                    <div id="setup-guide-nav-list" class="setup-guide-nav-list"></div>
+                </aside>
+
+                <div id="setup-guide-list" class="setup-guide-list"></div>
+            </div>
+        </section>
+
         <section id="view-journal" class="view">
             <div class="stats-grid" id="stats-grid"></div>
             <section class="panel toolbar">
@@ -2233,6 +2741,7 @@
         const DAILY_PLAN_KEY = "rsvDailyPlan.v1";
         const TODAY_PART_KEY = "rsvTodayPart.v1";
         const WORKBENCH_TOOL_KEY = "rsvWorkbenchTool.v1";
+        const EXECUTION_DRAFT_KEY = "rsvExecutionDraft.v1";
         const TRADINGVIEW_WIDGET_SRC = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
 
         const defaultTvSettings = () => ({
@@ -2253,6 +2762,17 @@
                 backToFvg: false
             },
             kim: "none",
+            kimDeep: {
+                impulse: false,
+                weakPullback: false,
+                strongBounce: false,
+                triggerBroken: false,
+                triggerPending: false,
+                aligned: false,
+                counterTrend: false,
+                slValid: false,
+                slInvalid: false
+            },
             note: "",
             updatedAt: ""
         });
@@ -2322,6 +2842,17 @@
                 kim_bear: "Kim 順勢空",
                 unclear: "Kim 逆勢 / 不清"
             },
+            kimDeep: {
+                impulse: "waterfall / impulse",
+                weakPullback: "反彈弱 / 小回調",
+                strongBounce: "反彈太強",
+                triggerBroken: "已破 trigger",
+                triggerPending: "未破 trigger",
+                aligned: "方向順大勢",
+                counterTrend: "方向逆大勢",
+                slValid: "SL 在失效位外",
+                slInvalid: "SL 不合理 / 未確認"
+            },
             vsop: {
                 imbalance: "Imbalance",
                 fvg: "FVG",
@@ -2360,10 +2891,82 @@
             }
         };
 
+        const setupGuideLessons = [
+            {
+                id: "first_trap",
+                name: "FIRST TRAP",
+                badge: "假突破後歸隊",
+                oneLine: "先找出被掃走的一方，再等價格 reclaim 關鍵位；你不是追突破，而是跟真正重新掌控的一方走。",
+                market: "適合有明顯關鍵位、PMH/PML、前高前低、Range 邊界，並出現掃 liquidity 後快速收回的位置。",
+                see: ["先突破或刺穿明顯 level，令一邊 stop loss 被掃。", "刺穿後不能延續，價格回到 level 內側。", "重新站回 / 跌回 level 後有推進，證明 trap 的一方要補倉。"],
+                trigger: "Reclaim 關鍵位後，等第一個可控回踩或突破小結構，不要在掃 liquidity 的那一刻追入。",
+                invalid: "SL 放在 trap 極端位外；如果價格重新跌回 reclaim 下方，代表 trap 未成功。",
+                target: "先看回下一個 liquidity、Range 另一邊，或當日計劃中的最近關鍵位。",
+                avoid: ["只見刺穿，未見 reclaim。", "前方立即撞 HTF 支撐/阻力。", "你只是因為錯過第一段而想追。"],
+                questions: ["被 trap 的人在哪裡？", "價格有沒有 reclaim 關鍵位？", "SL 放在 trap 外仍有 1.5R 以上嗎？"],
+                steps: ["掃 level", "收回", "回踩確認", "跟歸隊方向"]
+            },
+            {
+                id: "vsop",
+                name: "VSOP",
+                badge: "四步齊才成立",
+                oneLine: "VSOP 不是看到 FVG 就做；它要完成 Imbalance、FVG、Sweep Liquidity、Back to FVG 四步。",
+                market: "適合有明顯失衡推進、留下 FVG，之後又回頭掃流動性並回到 FVG 的結構。",
+                see: ["Imbalance：先有一段不平衡推進。", "Create FVG：推進留下可辨認的 fair value gap。", "Sweep Liquidity：回頭掃走早入場的人。", "Back to FVG：價格回到 FVG，提供可控入場位。"],
+                trigger: "回到 FVG 後出現方向確認，例如小結構轉向、反應 candle、或重新順勢離開 FVG。",
+                invalid: "SL 放在 sweep 極端位外，或放在 FVG 失效後仍不應硬守。",
+                target: "看回 imbalance 起點/終點、下一個 liquidity，或盤前計劃定好的 level。",
+                avoid: ["四步未齊，只完成 2-3 步。", "FVG 太遠，追入後 SL 失控。", "Back to FVG 時已經撞 HTF 擋路。"],
+                questions: ["四步是否真的齊？", "Back to FVG 是否給到可控 SL？", "目標前方有沒有牆？"],
+                steps: ["Imbalance", "FVG", "Sweep", "Back to FVG"]
+            },
+            {
+                id: "cloud_to_cloud",
+                name: "CLOUD TO CLOUD",
+                badge: "Level to level",
+                oneLine: "把 Cloud 當成一層層地板或天花板；打穿一層後，下一層 Cloud 才是合理目標。",
+                market: "適合大方向清楚、Cloud 顏色與趨勢一致，而且當前 Cloud 到下一個 Cloud 中間路徑乾淨。",
+                see: ["目前 Cloud 有明確方向，不是亂穿。", "下一個 Cloud 目標清晰。", "中間沒有 PMH/PML、PDH/PDL、HTF Cloud 或重大水平位阻擋。"],
+                trigger: "價格離開當前 Cloud，回踩不失守，並繼續向下一層 Cloud 推進。",
+                invalid: "SL 放在剛突破的 Cloud / 關鍵位另一側；一旦回到 Cloud 內亂穿，就不是乾淨路徑。",
+                target: "下一層 Cloud、下一個大 time frame level，或計劃中最近的 level to level 目標。",
+                avoid: ["中間有明顯阻力卻硬說路徑乾淨。", "Cloud 亂穿，方向未明。", "到下一層 Cloud 的距離不足，R:R 不合格。"],
+                questions: ["下一個 Cloud 在哪裡？", "中間有沒有 HTF 擋路？", "由 Entry 到下一層 Cloud 是否值得做？"],
+                steps: ["離開 Cloud", "路徑乾淨", "回踩不失守", "下一層 Cloud"]
+            },
+            {
+                id: "kim_setup",
+                name: "KIM / R-KIM",
+                badge: "候選 → 觸發 → 執行",
+                oneLine: "Kim 不是見到大陰燭就追空；先要有 waterfall / impulse，再有弱反彈，最後破 pivot trigger 才叫觸發。",
+                market: "適合有明確方向和攻擊段的市場。Downtrend 專心看 Kim short；Uptrend 專心看 R-Kim long。Range 中間或方向不明時，只能觀察。",
+                see: [
+                    "候選 Kim：先出現一段清楚 waterfall / impulse，不是普通震盪慢慢跌。",
+                    "確認 Kim：反彈短、弱、細，不能把第一段攻擊收復。",
+                    "觸發 Kim：Kim short 要跌穿最後 low pivot；R-Kim 要升穿最後 high pivot。",
+                    "失效 Kim：反彈太強、方向逆大勢、或未破 trigger 前已經追入。"
+                ],
+                trigger: "Kim short 的 trigger 是跌穿弱反彈前的最後 low pivot；R-Kim 則是升穿弱回調前的最後 high pivot。未破 trigger 前，一律只叫候選。",
+                invalid: "SL 應放在弱反彈 / 小回調外側，或結構重新收復的位置。若 SL 需要放得很遠才合理，通常代表你已經追價。",
+                target: "先看第二腳延伸到下一個 liquidity / Cloud / level；金木資料提醒第二段常比第一段短，所以不要把 TP 想得過份貪心。",
+                avoid: [
+                    "只有 waterfall，沒有弱反彈，不算正式 Kim。",
+                    "反彈太強、重新收復攻擊段，不再是 weak bounce。",
+                    "未破 trigger 就入場，是主觀預判，不是執行 setup。",
+                    "Uptrend 硬做 Kim short，Downtrend 硬做 R-Kim long。"
+                ],
+                questions: ["第一段是不是明顯 waterfall / impulse？", "反彈是否真的弱，還是已經收復太多？", "最後 pivot trigger 是否已破，SL 是否在失效位外？"],
+                steps: ["候選：Impulse", "確認：Weak bounce", "觸發：Break pivot", "執行：SL 在失效位外"],
+                stat: "金木師公資料提醒：整理期多數偏短，第二段通常較第一段短；這只是背景統計，不可代替 trigger。"
+            }
+        ];
+
         const els = {
             tabs: document.querySelectorAll(".tab-btn"),
             views: {
                 today: document.getElementById("view-today"),
+                execution: document.getElementById("view-execution"),
+                tutorial: document.getElementById("view-tutorial"),
                 journal: document.getElementById("view-journal"),
                 review: document.getElementById("view-review")
             },
@@ -2406,6 +3009,29 @@
             liveTakeProfit: document.getElementById("live-take-profit"),
             liveStatus: document.getElementById("live-status"),
             liveReason: document.getElementById("live-reason"),
+            executionForm: document.getElementById("execution-form"),
+            executionStatusPill: document.getElementById("execution-status-pill"),
+            executionLiveModeToggle: document.getElementById("execution-live-mode-toggle"),
+            executionStatusLight: document.getElementById("execution-status-light"),
+            executionStatusTitle: document.getElementById("execution-status-title"),
+            executionStatusDesc: document.getElementById("execution-status-desc"),
+            executionPlanSummary: document.getElementById("execution-plan-summary"),
+            executionWarnings: document.getElementById("execution-warnings"),
+            executionDraftStatus: document.getElementById("execution-draft-status"),
+            executionDate: document.getElementById("execution-date"),
+            executionSymbol: document.getElementById("execution-symbol"),
+            executionDirection: document.getElementById("execution-direction"),
+            executionSetup: document.getElementById("execution-setup"),
+            executionEntry: document.getElementById("execution-entry"),
+            executionStopLoss: document.getElementById("execution-stop-loss"),
+            executionTakeProfit: document.getElementById("execution-take-profit"),
+            executionRr: document.getElementById("execution-rr"),
+            executionRrStatus: document.getElementById("execution-rr-status"),
+            executionConfidence: document.getElementById("execution-confidence"),
+            executionConfidenceValue: document.getElementById("execution-confidence-value"),
+            executionNote: document.getElementById("execution-note"),
+            setupGuideNavList: document.getElementById("setup-guide-nav-list"),
+            setupGuideList: document.getElementById("setup-guide-list"),
             todayPartButtons: document.querySelectorAll("[data-today-part]"),
             workbenchToolButtons: document.querySelectorAll("[data-workbench-tool]"),
             decisionStack: document.querySelector(".decision-stack"),
@@ -2788,6 +3414,11 @@
             els.liveModeToggle.setAttribute("aria-pressed", String(liveMode));
             els.liveModePill.textContent = liveMode ? "盤中模式" : "教學模式";
             els.liveModePill.className = `badge ${liveMode ? "green" : ""}`;
+            if (els.executionLiveModeToggle) {
+                els.executionLiveModeToggle.textContent = liveMode ? "快判模式 ON" : "快判模式 OFF";
+                els.executionLiveModeToggle.setAttribute("aria-pressed", String(liveMode));
+                els.executionLiveModeToggle.className = liveMode ? "secondary-btn" : "ghost-btn";
+            }
             localStorage.setItem(LIVE_MODE_KEY, liveMode ? "true" : "false");
             if (showMessage) showToast(liveMode ? "已切換到盤中快判模式。" : "已回到完整模式。");
             updateLivePanel();
@@ -2812,6 +3443,388 @@
         function currentRiskRewardValue() {
             const value = Number(formValue("rr"));
             return Number.isFinite(value) && value > 0 ? value : NaN;
+        }
+
+        function executionSetupName(setupId) {
+            if (!setupId) return "未知";
+            if (setupId === "none") return "沒有清晰 Setup";
+            return dailyPlanLabels.setup[setupId] || setupId;
+        }
+
+        function executionDecisionText(direction) {
+            if (direction === "long") return "做多 (LONG)";
+            if (direction === "short") return "做空 (SHORT)";
+            if (direction === "wait") return "等待 (WAIT)";
+            return "草稿 / 未完成";
+        }
+
+        function executionDecisionClass(direction) {
+            if (direction === "long") return "long";
+            if (direction === "short") return "short";
+            return "wait";
+        }
+
+        function executionTradeType(draft) {
+            const setupName = executionSetupName(draft.setupId);
+            if (draft.direction === "long") return `${setupName} 執行做多`;
+            if (draft.direction === "short") return `${setupName} 執行做空`;
+            if (draft.direction === "wait") return "不落盤 / WAIT";
+            return "待補判斷";
+        }
+
+        function normalizeExecutionDraft(raw = {}) {
+            const source = raw && typeof raw === "object" ? raw : {};
+            const direction = ["long", "short", "wait"].includes(source.direction) ? source.direction : "";
+            const rawSetupId = String(source.setupId || "");
+            const setupId = (dailyPlanLabels.setup[rawSetupId] || rawSetupId === "none") ? rawSetupId : "";
+            return {
+                tradeDate: String(source.tradeDate || todayString()).slice(0, 10),
+                symbol: String(source.symbol || "").trim(),
+                direction,
+                setupId,
+                confidence: Math.min(5, Math.max(1, Number(source.confidence || 3))),
+                entry: String(source.entry || "").trim(),
+                stopLoss: String(source.stopLoss || "").trim(),
+                takeProfit: String(source.takeProfit || "").trim(),
+                note: String(source.note || "").trim(),
+                updatedAt: String(source.updatedAt || "")
+            };
+        }
+
+        function readExecutionDraftFromInputs() {
+            if (!els.executionForm) return normalizeExecutionDraft();
+            return normalizeExecutionDraft({
+                tradeDate: els.executionDate.value || todayString(),
+                symbol: els.executionSymbol.value,
+                direction: els.executionDirection.value,
+                setupId: els.executionSetup.value,
+                confidence: els.executionConfidence.value,
+                entry: els.executionEntry.value,
+                stopLoss: els.executionStopLoss.value,
+                takeProfit: els.executionTakeProfit.value,
+                note: els.executionNote.value,
+                updatedAt: els.executionDraftStatus.dataset.updatedAt || ""
+            });
+        }
+
+        function hasExecutionDraftContent(draftInput) {
+            const draft = normalizeExecutionDraft(draftInput);
+            return Boolean(
+                draft.symbol
+                || draft.direction
+                || draft.setupId
+                || draft.entry
+                || draft.stopLoss
+                || draft.takeProfit
+                || draft.note
+            );
+        }
+
+        function executionRrBand(rrResult) {
+            if (!rrResult.valid || !Number.isFinite(rrResult.rrNumber)) return "none";
+            if (rrResult.rrNumber < 1) return "red";
+            if (rrResult.rrNumber < 2) return "yellow";
+            return "green";
+        }
+
+        function executionTrendIdForDraft(draft) {
+            if (appState.trendId) return appState.trendId;
+            if (draft.direction === "long") return "uptrend";
+            if (draft.direction === "short") return "downtrend";
+            return "";
+        }
+
+        function isKimExecutionDraft(draft, snapshot = indicatorState) {
+            const clean = normalizeIndicatorSnapshot(snapshot);
+            return draft.setupId === "kim_setup" || clean.kim === "kim_bear" || clean.kim === "rkim_bull";
+        }
+
+        function kimExecutionWarnings(draftInput, snapshotInput = indicatorState) {
+            const draft = normalizeExecutionDraft(draftInput);
+            const snapshot = normalizeIndicatorSnapshot(snapshotInput);
+            if (!isKimExecutionDraft(draft, snapshot)) return [];
+            const warnings = [];
+            const trendId = executionTrendIdForDraft(draft);
+
+            if (snapshot.kim === "kim_bear" && draft.direction === "long") {
+                warnings.push({ level: "bad", text: "Kim short 與執行 LONG 衝突。" });
+            }
+            if (snapshot.kim === "rkim_bull" && draft.direction === "short") {
+                warnings.push({ level: "bad", text: "R-Kim 與執行 SHORT 衝突。" });
+            }
+            if ((snapshot.kim === "kim_bear" && trendId === "uptrend")
+                || (snapshot.kim === "rkim_bull" && trendId === "downtrend")
+                || snapshot.kimDeep.counterTrend) {
+                warnings.push({ level: "bad", text: "逆勢 Kim，建議 WAIT。" });
+            }
+            if (!snapshot.kimDeep.triggerBroken) {
+                warnings.push({ level: "bad", text: "Kim 未觸發，只是候選；未破 trigger 前不要當正式入場。" });
+            }
+            if (snapshot.kimDeep.strongBounce) {
+                warnings.push({ level: "bad", text: "反彈太強，Kim 失效。" });
+            }
+            if (draft.entry && draft.stopLoss && snapshot.kimDeep.slInvalid) {
+                warnings.push({ level: "bad", text: "SL 位置不符合 Kim 失效位。" });
+            } else if (draft.entry && draft.stopLoss && !snapshot.kimDeep.slValid) {
+                warnings.push({ level: "warn", text: "SL 是否在弱反彈 / 小回調外側未確認。" });
+            }
+            return warnings;
+        }
+
+        function evaluateExecutionDraft(draftInput) {
+            const draft = normalizeExecutionDraft(draftInput);
+            const decisionText = executionDecisionText(draft.direction);
+            const decisionClass = executionDecisionClass(draft.direction);
+            const setupId = draft.setupId && draft.setupId !== "none" ? draft.setupId : "";
+            const setup = setupId ? { id: setupId, name: executionSetupName(setupId) } : null;
+            const rrResult = computeRiskReward(draft.entry, draft.stopLoss, draft.takeProfit, decisionText);
+            const rrNumber = rrResult.valid ? rrResult.rrNumber : NaN;
+            const plan = dailyPlanSnapshotForRecord(draft.tradeDate) || currentDailyPlan();
+            const planCheck = evaluateDailyPlanCompliance(
+                plan,
+                setup,
+                decisionClass,
+                rrNumber,
+                setupId,
+                executionTrendIdForDraft(draft)
+            );
+            const warnings = [];
+
+            if (!draft.direction) warnings.push({ level: "warn", text: "未選方向，可以先存草稿，但不可當正式入場訊號。" });
+            if ((draft.direction === "long" || draft.direction === "short") && (!draft.setupId || draft.setupId === "none")) {
+                warnings.push({ level: "bad", text: "未完成 Setup：沒有清晰 FIRST TRAP / VSOP / CLOUD TO CLOUD / KIM 證據。" });
+            }
+            if (appState.answers.respectsSystem === false) warnings.push({ level: "bad", text: "Step 1 已否決：市場不尊重系統，建議 WAIT。" });
+            if (appState.trendId === "none") warnings.push({ level: "bad", text: "Step 2 已否決：趨勢不明，不應硬做方向。" });
+            if (appState.answers.blocked === true) warnings.push({ level: "bad", text: "HTF 擋路：大 Time Frame 前方空間不足。" });
+
+            kimExecutionWarnings(draft).forEach(item => warnings.push(item));
+
+            if (rrResult.valid && rrResult.rrNumber < 1) warnings.push({ level: "bad", text: rrResult.message });
+            else if (rrResult.valid && rrResult.rrNumber < 2) warnings.push({ level: "warn", text: rrResult.message });
+
+            planCheck.messages.forEach(message => {
+                warnings.push({
+                    level: message.includes("符合") || message.includes("未見衝突") ? "good" : message.includes("計劃外") ? "orange" : "warn",
+                    text: message
+                });
+            });
+
+            let status = "小心";
+            let statusClass = "warn";
+            if (warnings.some(item => item.level === "bad")) {
+                status = "高風險";
+                statusClass = "bad";
+            } else if (warnings.some(item => item.level === "orange")) {
+                status = "計劃外";
+                statusClass = "orange";
+            } else if (warnings.some(item => item.level === "warn")) {
+                status = "小心";
+                statusClass = "warn";
+            } else if ((draft.direction === "long" || draft.direction === "short") && rrResult.valid && rrResult.rrNumber >= 2) {
+                status = "可執行";
+                statusClass = "good";
+            }
+
+            return { draft, decisionText, decisionClass, setup, rrResult, rrBand: executionRrBand(rrResult), plan, planCheck, warnings, status, statusClass };
+        }
+
+        function executionSnapshotText(snapshot) {
+            if (!snapshot || typeof snapshot !== "object") return "";
+            const warnings = Array.isArray(snapshot.warnings) && snapshot.warnings.length
+                ? snapshot.warnings.join("；")
+                : "無明顯警告";
+            return `R:R: ${snapshot.rrBand || "none"}｜${snapshot.planMatch || "未檢查計劃"}｜${warnings}`;
+        }
+
+        function normalizeExecutionSnapshot(raw) {
+            if (!raw || typeof raw !== "object") return null;
+            const warnings = Array.isArray(raw.warnings) ? raw.warnings.map(item => String(item)).filter(Boolean) : [];
+            const hasContent = raw.savedFromExecution || raw.rrBand || raw.planMatch || warnings.length;
+            if (!hasContent) return null;
+            return {
+                rrBand: String(raw.rrBand || "none"),
+                warnings,
+                planMatch: String(raw.planMatch || ""),
+                savedFromExecution: Boolean(raw.savedFromExecution),
+                createdAt: String(raw.createdAt || "")
+            };
+        }
+
+        function renderExecutionPanel() {
+            if (!els.executionForm) return;
+            const evaluation = evaluateExecutionDraft(readExecutionDraftFromInputs());
+            const { draft, rrResult, plan, warnings, status, statusClass } = evaluation;
+            const hasPlan = hasDailyPlanContent(plan);
+            els.executionConfidenceValue.textContent = String(draft.confidence);
+            els.executionRr.value = rrResult.rr;
+            els.executionRr.className = rrResult.className || "";
+            els.executionRrStatus.textContent = rrResult.rr ? rrResult.message : "輸入 Entry / SL / TP 後自動計算。";
+            els.executionRrStatus.className = `field-help ${rrResult.className || ""}`;
+            els.executionPlanSummary.textContent = hasPlan ? dailyPlanSummaryText(plan) : "今日未填盤前計劃。";
+            els.executionPlanSummary.classList.toggle("warn", !hasPlan);
+            els.executionStatusTitle.textContent = status;
+            els.executionStatusDesc.textContent = liveMode
+                ? (status === "可執行"
+                    ? "盤中模式：票據合格才行動，入場後只按原 SL 和計劃執行。"
+                    : "盤中模式：先停一停，紅色/橙色提醒要寫入草稿，避免事後忘記。")
+                : (status === "可執行"
+                    ? "計劃、Setup 和 R:R 暫時未見主要衝突。仍然按 SL 執行。"
+                    : "先處理下方提醒；如仍要做，日誌會標記當時偏離的位置。");
+            els.executionStatusLight.className = `execution-status-light ${statusClass}`;
+            els.executionStatusPill.textContent = status;
+            els.executionStatusPill.className = `badge ${statusClass === "bad" ? "red" : statusClass === "good" ? "green" : statusClass === "orange" ? "orange" : "yellow"}`;
+            els.executionWarnings.innerHTML = warnings.length
+                ? warnings.map(item => `<div class="execution-warning ${item.level === "bad" ? "bad" : item.level === "good" ? "good" : ""}">${escapeHtml(item.text)}</div>`).join("")
+                : `<div class="execution-warning good">暫時未見主要衝突。記住：合格不等於必勝，只代表可以按計劃執行。</div>`;
+            els.executionDraftStatus.textContent = draft.updatedAt ? `已暫存 ${formatDateTime(draft.updatedAt)}` : "未暫存";
+            els.executionDraftStatus.dataset.updatedAt = draft.updatedAt;
+        }
+
+        function applyExecutionDraftToInputs(draftInput, render = true) {
+            if (!els.executionForm) return;
+            const draft = normalizeExecutionDraft(draftInput);
+            els.executionDate.value = draft.tradeDate;
+            els.executionSymbol.value = draft.symbol;
+            els.executionDirection.value = draft.direction;
+            els.executionSetup.value = draft.setupId;
+            els.executionConfidence.value = String(draft.confidence);
+            els.executionEntry.value = draft.entry;
+            els.executionStopLoss.value = draft.stopLoss;
+            els.executionTakeProfit.value = draft.takeProfit;
+            els.executionNote.value = draft.note;
+            els.executionDraftStatus.dataset.updatedAt = draft.updatedAt;
+            if (render) renderExecutionPanel();
+        }
+
+        function persistExecutionDraftFromInputs() {
+            if (!els.executionForm) return;
+            const draft = {
+                ...readExecutionDraftFromInputs(),
+                updatedAt: new Date().toISOString()
+            };
+            localStorage.setItem(EXECUTION_DRAFT_KEY, JSON.stringify(draft));
+            els.executionDraftStatus.dataset.updatedAt = draft.updatedAt;
+            renderExecutionPanel();
+        }
+
+        function loadExecutionDraft() {
+            if (!els.executionForm) return;
+            try {
+                const stored = JSON.parse(localStorage.getItem(EXECUTION_DRAFT_KEY) || "null");
+                applyExecutionDraftToInputs(stored || normalizeExecutionDraft());
+            } catch (error) {
+                applyExecutionDraftToInputs(normalizeExecutionDraft());
+            }
+        }
+
+        function syncExecutionFromToday() {
+            const settings = readTvSettingsFromInputs();
+            const direction = appState.decisionText ? decisionClassFromText(appState.decisionText) : "";
+            const setupId = appState.setupId || appState.setupDetection?.candidates?.[0]?.id || "";
+            const draft = {
+                tradeDate: formValue("trade-date") || todayString(),
+                symbol: formValue("symbol") || settings.symbol,
+                direction: direction === "wait" && !appState.decisionText.includes("WAIT") ? "" : direction,
+                setupId,
+                confidence: document.getElementById("confidence").value || 3,
+                entry: formValue("entry"),
+                stopLoss: formValue("stop-loss"),
+                takeProfit: formValue("take-profit"),
+                note: formValue("plan-note"),
+                updatedAt: new Date().toISOString()
+            };
+            applyExecutionDraftToInputs(draft);
+            localStorage.setItem(EXECUTION_DRAFT_KEY, JSON.stringify(normalizeExecutionDraft(draft)));
+            showToast("已同步今日快判到執行票據。");
+        }
+
+        function copyExecutionToSaveForm() {
+            const draft = readExecutionDraftFromInputs();
+            showView("today");
+            setTodayPart("save");
+            requestAnimationFrame(() => {
+                setInputValue("trade-date", draft.tradeDate);
+                setInputValue("symbol", draft.symbol);
+                setInputValue("entry", draft.entry);
+                setInputValue("stop-loss", draft.stopLoss);
+                setInputValue("take-profit", draft.takeProfit);
+                setInputValue("plan-note", draft.note);
+                document.getElementById("confidence").value = String(draft.confidence);
+                updateConfidence();
+                updateRiskReward();
+                document.getElementById("symbol").focus();
+            });
+        }
+
+        function clearExecutionDraft() {
+            localStorage.removeItem(EXECUTION_DRAFT_KEY);
+            applyExecutionDraftToInputs(normalizeExecutionDraft());
+            showToast("執行票據已清空。");
+        }
+
+        function saveExecutionDraft(event) {
+            if (event) event.preventDefault();
+            const draft = readExecutionDraftFromInputs();
+            if (!hasExecutionDraftContent(draft)) {
+                showToast("先填商品、方向、價格或備註，才存成草稿。");
+                return;
+            }
+            const evaluation = evaluateExecutionDraft(draft);
+            const submittedAt = new Date().toISOString();
+            const currentTvSettings = readTvSettingsFromInputs();
+            const record = normalizeRecord({
+                id: makeId(),
+                createdAt: submittedAt,
+                submittedAt,
+                updatedAt: submittedAt,
+                tradeDate: draft.tradeDate,
+                symbol: draft.symbol,
+                session: formValue("session") || "Market Open",
+                timeframe: formValue("timeframe"),
+                trendId: appState.trendId,
+                trendName: appState.trendName,
+                setupId: draft.setupId,
+                setupName: executionSetupName(draft.setupId),
+                setupDetection: appState.setupDetection,
+                dailyPlanSnapshot: dailyPlanSnapshotForRecord(draft.tradeDate),
+                decisionText: evaluation.decisionText,
+                tradeType: executionTradeType(draft),
+                reasonText: `執行分頁草稿：${evaluation.status}。${evaluation.warnings.map(item => item.text).join("；") || "暫時未見主要衝突。"}`,
+                answers: appState.answers,
+                risk: {
+                    entry: draft.entry,
+                    stopLoss: draft.stopLoss,
+                    takeProfit: draft.takeProfit,
+                    rr: evaluation.rrResult.rr
+                },
+                chartContext: {
+                    tvSymbol: currentTvSettings.symbol,
+                    tvInterval: currentTvSettings.interval,
+                    tvLayoutUrl: currentTvSettings.layoutUrl
+                },
+                indicatorSnapshot: indicatorState,
+                confidence: draft.confidence,
+                planNote: draft.note,
+                outcome: "pending",
+                reviewNote: "",
+                tags: "execution,draft",
+                executionSnapshot: {
+                    rrBand: evaluation.rrBand,
+                    warnings: evaluation.warnings.map(item => item.text),
+                    planMatch: evaluation.planCheck.summary || "未填盤前計劃",
+                    savedFromExecution: true,
+                    createdAt: submittedAt
+                }
+            });
+            if (!record) {
+                showToast("草稿內容不足，請先補一點資料。");
+                return;
+            }
+            records.unshift(record);
+            saveRecords();
+            renderAll();
+            showToast("已存為日誌草稿，之後可回日誌補資料。");
         }
 
         function updateLivePanel() {
@@ -2886,6 +3899,7 @@
             els.liveReason.textContent = (appState.reasonText || setupDetectionSummaryText(detection) || "先填客觀觀察，再讓系統判斷。") + planText;
             if (rrResult.className === "bad" || rrResult.className === "warn") els.liveReason.textContent += ` ${rrResult.message}`;
             if (rrWarning && rrResult.className !== "bad" && rrResult.className !== "warn") els.liveReason.textContent += rrWarning;
+            renderExecutionPanel();
         }
 
         function quickDetectSetup() {
@@ -3108,6 +4122,7 @@
         function normalizeIndicatorSnapshot(raw) {
             const defaults = defaultIndicatorState();
             const vsop = raw && typeof raw.vsop === "object" ? raw.vsop : {};
+            const kimDeep = raw && typeof raw.kimDeep === "object" ? raw.kimDeep : {};
             return {
                 cloud: indicatorLabels.cloud[String(raw?.cloud || "")] ? String(raw.cloud) : defaults.cloud,
                 cloudPath: indicatorLabels.cloudPath[String(raw?.cloudPath || "")] ? String(raw.cloudPath) : defaults.cloudPath,
@@ -3119,9 +4134,38 @@
                     backToFvg: Boolean(vsop.backToFvg)
                 },
                 kim: indicatorLabels.kim[String(raw?.kim || "")] ? String(raw.kim) : defaults.kim,
+                kimDeep: {
+                    impulse: Boolean(kimDeep.impulse),
+                    weakPullback: Boolean(kimDeep.weakPullback),
+                    strongBounce: Boolean(kimDeep.strongBounce),
+                    triggerBroken: Boolean(kimDeep.triggerBroken),
+                    triggerPending: Boolean(kimDeep.triggerPending),
+                    aligned: Boolean(kimDeep.aligned),
+                    counterTrend: Boolean(kimDeep.counterTrend),
+                    slValid: Boolean(kimDeep.slValid),
+                    slInvalid: Boolean(kimDeep.slInvalid)
+                },
                 note: String(raw?.note || ""),
                 updatedAt: String(raw?.updatedAt || "")
             };
+        }
+
+        function activeKimDeepSteps(snapshot) {
+            const clean = normalizeIndicatorSnapshot(snapshot);
+            return Object.entries(clean.kimDeep)
+                .filter(([, value]) => value)
+                .map(([key]) => indicatorLabels.kimDeep[key]);
+        }
+
+        function kimDeepStageText(snapshot) {
+            const clean = normalizeIndicatorSnapshot(snapshot);
+            if (clean.kim === "none") return "未選 Kim";
+            if (clean.kim === "unclear" || clean.kimDeep.counterTrend) return "失效 / 逆勢";
+            if (clean.kimDeep.strongBounce) return "失效 / 反彈太強";
+            if (clean.kimDeep.impulse && clean.kimDeep.weakPullback && clean.kimDeep.triggerBroken) return "觸發 Kim";
+            if (clean.kimDeep.impulse && clean.kimDeep.weakPullback) return "候選 Kim（未破 trigger）";
+            if (clean.kimDeep.impulse) return "候選不足（只見攻擊段）";
+            return "未完成";
         }
 
         function indicatorSummaryText(snapshot = indicatorState) {
@@ -3130,12 +4174,14 @@
                 .filter(([, value]) => value)
                 .map(([key]) => indicatorLabels.vsop[key]);
             const vsopText = `${activeVsop.length}/4${activeVsop.length ? ` (${activeVsop.join(", ")})` : ""}`;
+            const kimSteps = activeKimDeepSteps(clean);
+            const kimText = `${indicatorLabels.kim[clean.kim]}｜${kimDeepStageText(clean)}${kimSteps.length ? ` (${kimSteps.join(", ")})` : ""}`;
             const parts = [
                 `Cloud: ${indicatorLabels.cloud[clean.cloud]}`,
                 `C2C: ${indicatorLabels.cloudPath[clean.cloudPath]}`,
                 `Trap: ${indicatorLabels.trap[clean.trap]}`,
                 `VSOP: ${vsopText}`,
-                `Kim: ${indicatorLabels.kim[clean.kim]}`
+                `Kim: ${kimText}`
             ];
             if (clean.note) parts.push(`備註: ${clean.note}`);
             return parts.join("｜");
@@ -3148,6 +4194,9 @@
             });
             document.querySelectorAll("[data-vsop-step]").forEach(button => {
                 button.classList.toggle("active", Boolean(indicatorState.vsop[button.dataset.vsopStep]));
+            });
+            document.querySelectorAll("[data-kim-deep-step]").forEach(button => {
+                button.classList.toggle("active", Boolean(indicatorState.kimDeep[button.dataset.kimDeepStep]));
             });
             els.indicatorNote.value = indicatorState.note;
             els.indicatorSummary.textContent = indicatorSummaryText(indicatorState);
@@ -3164,6 +4213,22 @@
         function toggleVsopStep(step) {
             indicatorState.vsop[step] = !indicatorState.vsop[step];
             indicatorState.updatedAt = new Date().toISOString();
+            updateIndicatorUi();
+        }
+
+        function toggleKimDeepStep(step) {
+            const clean = normalizeIndicatorSnapshot(indicatorState);
+            if (!(step in clean.kimDeep)) return;
+            clean.kimDeep[step] = !clean.kimDeep[step];
+            if (step === "triggerBroken" && clean.kimDeep[step]) clean.kimDeep.triggerPending = false;
+            if (step === "triggerPending" && clean.kimDeep[step]) clean.kimDeep.triggerBroken = false;
+            if (step === "strongBounce" && clean.kimDeep[step]) clean.kimDeep.weakPullback = false;
+            if (step === "weakPullback" && clean.kimDeep[step]) clean.kimDeep.strongBounce = false;
+            if (step === "aligned" && clean.kimDeep[step]) clean.kimDeep.counterTrend = false;
+            if (step === "counterTrend" && clean.kimDeep[step]) clean.kimDeep.aligned = false;
+            if (step === "slValid" && clean.kimDeep[step]) clean.kimDeep.slInvalid = false;
+            if (step === "slInvalid" && clean.kimDeep[step]) clean.kimDeep.slValid = false;
+            indicatorState = { ...clean, updatedAt: new Date().toISOString() };
             updateIndicatorUi();
         }
 
@@ -3255,15 +4320,31 @@
                 blockers.push("CLOUD TO CLOUD：未確認下一個 Cloud 目標是否清晰。");
             }
 
-            if (isKimAligned(snapshot)) {
-                addCandidate("kim_setup", "KIM SETUP / R-KIM", 88, [
-                    "Kim / R-Kim 與大方向一致",
-                    "適合等待攻擊段、弱回調、突破 trigger"
-                ]);
-            } else if (snapshot.kim === "rkim_bull" || snapshot.kim === "kim_bear") {
-                blockers.push("KIM：訊號與目前大方向不一致，容易變成主觀逆勢。");
-            } else if (snapshot.kim === "unclear") {
+            const kimDeep = snapshot.kimDeep;
+            const hasKimSelection = snapshot.kim === "rkim_bull" || snapshot.kim === "kim_bear";
+            if (hasKimSelection) {
+                const alignedByTrend = appState.trendId ? isKimAligned(snapshot) : kimDeep.aligned;
+                if (!alignedByTrend || kimDeep.counterTrend) {
+                    blockers.push("KIM：方向與大勢不一致，逆勢 Kim 建議 WAIT。");
+                } else if (kimDeep.strongBounce) {
+                    blockers.push("KIM：反彈太強，已不再是 weak bounce / small pullback。");
+                } else if (!kimDeep.impulse) {
+                    blockers.push("KIM：未見 waterfall / impulse，不能把普通震盪當 setup。");
+                } else if (!kimDeep.weakPullback) {
+                    blockers.push("KIM：未見弱反彈 / 小回調，只能列為觀察。");
+                } else if (!kimDeep.triggerBroken) {
+                    blockers.push("KIM 候選：waterfall + weak pullback 已有，但未破 trigger，未觸發前不入場。");
+                } else {
+                    addCandidate("kim_setup", "KIM SETUP / R-KIM", 92, [
+                        "waterfall / impulse 已確認",
+                        "反彈弱 / 小回調後已破 trigger",
+                        "方向與大勢一致"
+                    ]);
+                }
+            } else if (snapshot.kim === "unclear" || kimDeep.counterTrend) {
                 blockers.push("KIM：標記為逆勢 / 不清，不應硬做。");
+            } else if (kimDeep.impulse || kimDeep.weakPullback || kimDeep.triggerBroken) {
+                blockers.push("KIM 候選：深度證據未配合 Kim / R-Kim 方向，先補齊方向判斷。");
             } else {
                 blockers.push("KIM：未見清晰 Kim / R-Kim。");
             }
@@ -3358,6 +4439,7 @@
             const chartContext = raw.chartContext && typeof raw.chartContext === "object" ? raw.chartContext : {};
             const indicatorSnapshot = raw.indicatorSnapshot && typeof raw.indicatorSnapshot === "object" ? raw.indicatorSnapshot : {};
             const setupDetection = raw.setupDetection && typeof raw.setupDetection === "object" ? raw.setupDetection : null;
+            const executionSnapshot = normalizeExecutionSnapshot(raw.executionSnapshot);
             const dailyPlanSnapshot = raw.dailyPlanSnapshot && typeof raw.dailyPlanSnapshot === "object"
                 ? normalizeDailyPlan(raw.dailyPlanSnapshot, raw.tradeDate || todayString())
                 : null;
@@ -3388,6 +4470,7 @@
                         : [],
                     blockers: Array.isArray(setupDetection.blockers) ? setupDetection.blockers.map(item => String(item)) : []
                 } : null,
+                executionSnapshot,
                 dailyPlanSnapshot: dailyPlanSnapshot && hasDailyPlanContent(dailyPlanSnapshot) ? dailyPlanSnapshot : null,
                 decisionText,
                 tradeType: String(raw.tradeType || ""),
@@ -3452,7 +4535,175 @@
             if (updateHash && location.hash !== `#${viewName}`) {
                 history.replaceState(null, "", `#${viewName}`);
             }
+            if (viewName === "execution") renderExecutionPanel();
             renderAll();
+        }
+
+        function setupGuideBadgeClass(setupId) {
+            return {
+                first_trap: "orange",
+                vsop: "green",
+                cloud_to_cloud: "yellow",
+                kim_setup: "red"
+            }[setupId] || "";
+        }
+
+        function setupDiagramSvg(setupId) {
+            const common = `font-family="Inter, Arial, sans-serif" font-size="13"`;
+            if (setupId === "first_trap") {
+                return `
+                    <svg viewBox="0 0 760 260" role="img" aria-label="FIRST TRAP 簡易圖解">
+                        <rect width="760" height="260" fill="#07111f"/>
+                        <line x1="70" y1="142" x2="690" y2="142" stroke="#64748b" stroke-width="3" stroke-dasharray="8 8"/>
+                        <text x="80" y="130" fill="#cbd5e1" ${common}>Key level / Liquidity</text>
+                        <polyline points="80,178 150,162 220,148 285,92 335,150 410,132 500,104 610,78 690,62" fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="285" cy="92" r="11" fill="#f97316"/>
+                        <text x="250" y="72" fill="#fed7aa" ${common}>掃高位</text>
+                        <circle cx="335" cy="150" r="11" fill="#22c55e"/>
+                        <text x="350" y="171" fill="#bbf7d0" ${common}>reclaim 後才確認</text>
+                        <path d="M420 130 L470 112" stroke="#22c55e" stroke-width="3" marker-end="url(#arrow)"/>
+                        <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#22c55e"/></marker></defs>
+                    </svg>`;
+            }
+            if (setupId === "vsop") {
+                return `
+                    <svg viewBox="0 0 760 260" role="img" aria-label="VSOP 四步圖解">
+                        <rect width="760" height="260" fill="#07111f"/>
+                        <rect x="305" y="94" width="150" height="58" rx="8" fill="rgba(56,189,248,.18)" stroke="#38bdf8"/>
+                        <text x="340" y="128" fill="#dbeafe" ${common}>FVG</text>
+                        <polyline points="70,185 150,168 230,105 312,70 390,118 470,190 560,128 680,82" fill="none" stroke="#22c55e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <text x="110" y="205" fill="#cbd5e1" ${common}>1 Imbalance</text>
+                        <text x="300" y="82" fill="#93c5fd" ${common}>2 Create FVG</text>
+                        <text x="445" y="214" fill="#fecdd3" ${common}>3 Sweep</text>
+                        <text x="550" y="118" fill="#bbf7d0" ${common}>4 Back to FVG</text>
+                    </svg>`;
+            }
+            if (setupId === "cloud_to_cloud") {
+                return `
+                    <svg viewBox="0 0 760 260" role="img" aria-label="CLOUD TO CLOUD 圖解">
+                        <rect width="760" height="260" fill="#07111f"/>
+                        <rect x="70" y="150" width="190" height="44" rx="22" fill="rgba(34,197,94,.22)" stroke="#22c55e"/>
+                        <rect x="500" y="70" width="190" height="44" rx="22" fill="rgba(56,189,248,.22)" stroke="#38bdf8"/>
+                        <text x="112" y="178" fill="#bbf7d0" ${common}>Current Cloud</text>
+                        <text x="552" y="98" fill="#dbeafe" ${common}>Next Cloud</text>
+                        <polyline points="130,150 225,132 320,114 420,96 540,82" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="285" y1="132" x2="460" y2="96" stroke="#22c55e" stroke-width="3" stroke-dasharray="7 7"/>
+                        <text x="300" y="154" fill="#fde68a" ${common}>中間路徑要乾淨</text>
+                    </svg>`;
+            }
+            return `
+                <svg viewBox="0 0 760 260" role="img" aria-label="KIM R-KIM 圖解">
+                    <rect width="760" height="260" fill="#07111f"/>
+                    <polyline points="80,72 150,96 220,132 305,180" fill="none" stroke="#fb7185" stroke-width="6" stroke-linecap="round"/>
+                    <polyline points="305,180 370,154 430,164 500,190" fill="none" stroke="#facc15" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="350" y1="148" x2="472" y2="148" stroke="#fb7185" stroke-width="2" stroke-dasharray="6 6"/>
+                    <line x1="302" y1="190" x2="590" y2="190" stroke="#64748b" stroke-width="3" stroke-dasharray="8 8"/>
+                    <polyline points="500,190 585,216 680,232" fill="none" stroke="#fb7185" stroke-width="6" stroke-linecap="round"/>
+                    <text x="92" y="58" fill="#fecdd3" ${common}>Waterfall / impulse</text>
+                    <text x="334" y="138" fill="#fde68a" ${common}>weak bounce</text>
+                    <text x="365" y="142" fill="#fecdd3" ${common}>SL above weak bounce</text>
+                    <text x="516" y="184" fill="#fecdd3" ${common}>break pivot trigger</text>
+                    <text x="586" y="214" fill="#fecdd3" ${common}>target / second leg</text>
+                    <text x="82" y="232" fill="#cbd5e1" ${common}>R-KIM 方向倒轉：Uptrend 做多，等 break high pivot</text>
+                </svg>`;
+        }
+
+        function renderSetupGuide() {
+            if (!els.setupGuideNavList || !els.setupGuideList) return;
+            els.setupGuideNavList.innerHTML = setupGuideLessons.map(lesson => `
+                <button type="button" class="setup-jump" data-guide-jump="${escapeHtml(lesson.id)}">
+                    <strong>${escapeHtml(lesson.name)}</strong>
+                    <span>${escapeHtml(lesson.badge)}</span>
+                </button>
+            `).join("");
+            els.setupGuideList.innerHTML = setupGuideLessons.map(lesson => `
+                <article class="setup-card" id="setup-card-${escapeHtml(lesson.id)}">
+                    <div class="setup-card-header">
+                        <span class="setup-kicker">RSV Core Setup</span>
+                        <div class="setup-card-title">
+                            <h2>${escapeHtml(lesson.name)}</h2>
+                            <span class="badge ${setupGuideBadgeClass(lesson.id)}">${escapeHtml(lesson.badge)}</span>
+                        </div>
+                        <p class="setup-one-line">${escapeHtml(lesson.oneLine)}</p>
+                    </div>
+                    <div class="setup-card-body">
+                        <div class="setup-diagram">${setupDiagramSvg(lesson.id)}</div>
+                        <div class="setup-flow">
+                            ${lesson.steps.map((step, index) => `<div class="setup-flow-step"><b>${index + 1}.</b> ${escapeHtml(step)}</div>`).join("")}
+                        </div>
+                        <div class="setup-map">
+                            <div class="setup-section">
+                                <h3>適合什麼市況</h3>
+                                <p>${escapeHtml(lesson.market)}</p>
+                            </div>
+                            <div class="setup-section">
+                                <h3>入場觸發</h3>
+                                <p>${escapeHtml(lesson.trigger)}</p>
+                            </div>
+                            <div class="setup-section">
+                                <h3>失效位 / SL</h3>
+                                <p>${escapeHtml(lesson.invalid)}</p>
+                            </div>
+                            <div class="setup-section">
+                                <h3>目標 / TP</h3>
+                                <p>${escapeHtml(lesson.target)}</p>
+                            </div>
+                            <div class="setup-section full">
+                                <h3>你要看到什麼</h3>
+                                <ul class="setup-list">${lesson.see.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+                            </div>
+                            <div class="setup-section full">
+                                <h3>不要做的情況</h3>
+                                <ul class="setup-list">${lesson.avoid.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+                            </div>
+                            <div class="setup-section full">
+                                <h3>小白自問 3 題</h3>
+                                <div class="setup-question-grid">${lesson.questions.map(item => `<div class="setup-question">${escapeHtml(item)}</div>`).join("")}</div>
+                            </div>
+                            ${lesson.stat ? `
+                            <div class="setup-section full">
+                                <h3>統計提醒</h3>
+                                <p>${escapeHtml(lesson.stat)}</p>
+                            </div>` : ""}
+                        </div>
+                        <div class="setup-guide-actions">
+                            <button type="button" class="primary-btn" data-guide-use-setup="${escapeHtml(lesson.id)}">用這個 Setup 去執行</button>
+                            <button type="button" class="secondary-btn" data-guide-indicator>去指標快填</button>
+                        </div>
+                    </div>
+                </article>
+            `).join("");
+        }
+
+        function jumpSetupGuide(setupId) {
+            showView("tutorial");
+            requestAnimationFrame(() => {
+                document.getElementById(`setup-card-${setupId}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        }
+
+        function useGuideSetupInExecution(setupId) {
+            if (!dailyPlanLabels.setup[setupId]) return;
+            const draft = {
+                ...readExecutionDraftFromInputs(),
+                setupId,
+                updatedAt: new Date().toISOString()
+            };
+            showView("execution");
+            applyExecutionDraftToInputs(draft);
+            localStorage.setItem(EXECUTION_DRAFT_KEY, JSON.stringify(normalizeExecutionDraft(draft)));
+            renderExecutionPanel();
+            showToast(`${dailyPlanLabels.setup[setupId]} 已填入執行票據。`);
+            requestAnimationFrame(() => els.executionDirection.focus());
+        }
+
+        function goIndicatorFromGuide() {
+            showView("today");
+            setTodayPart("workbench");
+            setWorkbenchTool("indicator");
+            requestAnimationFrame(() => {
+                document.querySelector(".indicator-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
         }
 
         function showScreen(screenName, stepText) {
@@ -3881,6 +5132,7 @@
 
         function renderAll() {
             renderStats();
+            renderExecutionPanel();
             renderJournal();
             renderReview();
         }
@@ -3936,6 +5188,7 @@
             const setupDetection = record.setupDetection?.summary || "";
             const dailyPlanText = record.dailyPlanSnapshot ? dailyPlanSummaryText(record.dailyPlanSnapshot) : "";
             const planMatch = planMatchForRecord(record);
+            const executionText = executionSnapshotText(record.executionSnapshot);
             return `
                 <article class="record-card ${directionClass(record)}" data-record-id="${escapeHtml(record.id)}">
                     <div class="record-main">
@@ -3970,6 +5223,7 @@
                         ${setupDetection ? `<p class="record-note"><b>Setup 偵測：</b>${escapeHtml(setupDetection)}</p>` : ""}
                         ${dailyPlanText ? `<p class="record-note"><b>盤前計劃：</b>${escapeHtml(dailyPlanText)}</p>` : ""}
                         ${record.dailyPlanSnapshot ? `<p class="record-note"><b>計劃符合：</b>${escapeHtml(planMatch)}</p>` : ""}
+                        ${executionText ? `<p class="record-note"><b>執行快照：</b>${escapeHtml(executionText)}</p>` : ""}
                         <p class="record-note"><b>指標快填：</b>${escapeHtml(indicatorSummary)}</p>
                         ${record.planNote ? `<p class="record-note"><b>計劃：</b>${escapeHtml(record.planNote)}</p>` : ""}
                         ${record.screenshot ? `<p class="record-note"><b>截圖/備註：</b>${escapeHtml(record.screenshot)}</p>` : ""}
@@ -4078,6 +5332,7 @@
                 `Setup 偵測：${record.setupDetection?.summary || "-"}`,
                 `盤前計劃：${record.dailyPlanSnapshot ? dailyPlanSummaryText(record.dailyPlanSnapshot) : "-"}`,
                 `計劃符合：${planMatchForRecord(record)}`,
+                `執行快照：${executionSnapshotText(record.executionSnapshot) || "-"}`,
                 `TradingView：${record.chartContext?.tvSymbol || "-"} ${record.chartContext?.tvInterval ? intervalLabel(record.chartContext.tvInterval) : ""}`,
                 `指標快填：${indicatorSummaryText(record.indicatorSnapshot)}`,
                 `邏輯：${record.reasonText}`,
@@ -4106,6 +5361,7 @@
                 "tradeDate", "symbol", "session", "timeframe", "decision", "tradeType",
                 "trend", "setup", "setupDetection", "reason", "entry", "stopLoss", "takeProfit", "rr",
                 "dailyBias", "plannedSetups", "minRr", "planMatch",
+                "executionRrBand", "executionWarnings", "executionPlanMatch", "savedFromExecution",
                 "tvSymbol", "tvInterval", "tvLayoutUrl", "indicatorSummary", "confidence", "outcome", "planNote", "reviewNote", "tags", "submittedAt", "createdAt"
             ];
             const rows = records.map(record => [
@@ -4127,6 +5383,10 @@
                 record.dailyPlanSnapshot ? record.dailyPlanSnapshot.acceptedSetups.map(id => dailyPlanLabels.setup[id]).join("|") : "",
                 record.dailyPlanSnapshot ? record.dailyPlanSnapshot.minRr : "",
                 planMatchForRecord(record),
+                record.executionSnapshot?.rrBand || "",
+                record.executionSnapshot?.warnings?.join("|") || "",
+                record.executionSnapshot?.planMatch || "",
+                record.executionSnapshot?.savedFromExecution ? "yes" : "",
                 record.chartContext?.tvSymbol || "",
                 record.chartContext?.tvInterval || "",
                 record.chartContext?.tvLayoutUrl || "",
@@ -4237,6 +5497,20 @@
             els.workbenchToolButtons.forEach(button => {
                 button.addEventListener("click", () => setWorkbenchTool(button.dataset.workbenchTool));
             });
+            els.setupGuideNavList.addEventListener("click", event => {
+                const button = event.target.closest("[data-guide-jump]");
+                if (button) jumpSetupGuide(button.dataset.guideJump);
+            });
+            els.setupGuideList.addEventListener("click", event => {
+                const setupButton = event.target.closest("[data-guide-use-setup]");
+                if (setupButton) {
+                    useGuideSetupInExecution(setupButton.dataset.guideUseSetup);
+                    return;
+                }
+                if (event.target.closest("[data-guide-indicator]")) {
+                    goIndicatorFromGuide();
+                }
+            });
             document.getElementById("dismiss-install-btn").addEventListener("click", dismissInstallPrompt);
             window.addEventListener("online", () => {
                 updateNetworkUi();
@@ -4292,6 +5566,25 @@
                 input.addEventListener("input", syncLiveRiskInputsToForm);
                 input.addEventListener("change", syncLiveRiskInputsToForm);
             });
+            els.executionForm.addEventListener("submit", saveExecutionDraft);
+            els.executionLiveModeToggle.addEventListener("click", () => setLiveMode(!liveMode, true));
+            [
+                els.executionDate,
+                els.executionSymbol,
+                els.executionDirection,
+                els.executionSetup,
+                els.executionEntry,
+                els.executionStopLoss,
+                els.executionTakeProfit,
+                els.executionConfidence,
+                els.executionNote
+            ].forEach(input => {
+                input.addEventListener("input", persistExecutionDraftFromInputs);
+                input.addEventListener("change", persistExecutionDraftFromInputs);
+            });
+            document.getElementById("execution-sync-btn").addEventListener("click", syncExecutionFromToday);
+            document.getElementById("execution-jump-save-btn").addEventListener("click", copyExecutionToSaveForm);
+            document.getElementById("execution-clear-btn").addEventListener("click", clearExecutionDraft);
             els.tvSymbol.addEventListener("keydown", event => {
                 if (event.key === "Enter") {
                     event.preventDefault();
@@ -4304,6 +5597,9 @@
             });
             document.querySelectorAll("[data-vsop-step]").forEach(button => {
                 button.addEventListener("click", () => toggleVsopStep(button.dataset.vsopStep));
+            });
+            document.querySelectorAll("[data-kim-deep-step]").forEach(button => {
+                button.addEventListener("click", () => toggleKimDeepStep(button.dataset.kimDeepStep));
             });
             els.indicatorNote.addEventListener("input", syncIndicatorNote);
             document.getElementById("submit-indicator-setup-btn").addEventListener("click", submitIndicatorSetup);
@@ -4347,7 +5643,9 @@
             updateRiskReward();
             loadLiveMode();
             loadRecords();
+            renderSetupGuide();
             bindEvents();
+            loadExecutionDraft();
             setTodayPart(localStorage.getItem(TODAY_PART_KEY) || "workbench", false);
             setWorkbenchTool(localStorage.getItem(WORKBENCH_TOOL_KEY) || "flow", false);
             renderTradingView(false);
